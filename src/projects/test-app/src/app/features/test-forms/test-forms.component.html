@@ -1,0 +1,10 @@
+<p>test-forms works!</p>
+<div [formGroup]="form">
+
+  <input type="text" [formControl]="form.c.text1">
+  <input type="text" [formControl]="form.c.num1">
+
+  <div [formGroup]="form.c.obj1">
+    <input type="number" [formControl]="form.c.obj1.c.innerNum">
+  </div>
+</div>

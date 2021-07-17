@@ -2,7 +2,7 @@ import { AbstractControlOptions, AsyncValidatorFn, FormArray, ValidatorFn } from
 import { FormControlExt } from './form-control-ext.control';
 import { FormGroupExt } from './form-group-ext.control';
 import { enableDisableControl, suspendResumeAsyncValidators, suspendResumeValidators } from './helpers/control.helpers';
-import { ControlOptions, ControlValueOptions } from './models/controls.model';
+import { ControlStateOptions, ControlValueOptions } from './models/controls.model';
 
 type Unpacked<T> = T extends (infer U)[] ? U : T;
 
@@ -17,6 +17,10 @@ export class FormArrayExt
   private suspendedValidator: ValidatorFn | null = null;
   private suspendedAsyncValidator: AsyncValidatorFn | null = null;
 
+  public get c(): TControl[] { return this.controls as TControl[]; }
+  public get rv(): TValueArray { return this.getRawValue() as TValueArray; }
+  public get v(): TValueArray { return this.value; }
+
   constructor(controls: TControl[], validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null, asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null) {
     super(controls, validatorOrOpts, asyncValidator);
   }
@@ -29,7 +33,23 @@ export class FormArrayExt
     super.patchValue(value, options);
   }
 
-  public enableDisable(enable: boolean, resetOnDisable = true, resetValue?: TValue, options?: ControlOptions): void {
+  public at(index: number): TControl {
+    return super.at(index) as TControl;
+  }
+
+  public push(control: TControl): void {
+    super.push(control);
+  }
+
+  public insert(index: number, control: TControl): void {
+    super.insert(index, control);
+  }
+
+  public setControl(index: number, control: TControl): void {
+    super.setControl(index, control);
+  }
+
+  public enableDisable(enable: boolean, resetOnDisable = true, resetValue?: TValue, options?: ControlStateOptions): void {
     enableDisableControl(this, enable, resetOnDisable, resetValue, options);
   }
 

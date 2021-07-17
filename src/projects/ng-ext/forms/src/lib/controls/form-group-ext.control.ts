@@ -2,7 +2,7 @@ import { AbstractControlOptions, AsyncValidatorFn, FormGroup, ValidatorFn } from
 import { FormArrayExt } from './form-array-ext.control';
 import { FormControlExt } from './form-control-ext.control';
 import { enableDisableControl, suspendResumeAsyncValidators, suspendResumeValidators } from './helpers/control.helpers';
-import { ControlOptions } from './models/controls.model';
+import { ControlStateOptions } from './models/controls.model';
 
 
 export class FormGroupExt
@@ -26,15 +26,15 @@ export class FormGroupExt
     super(controls, validatorOrOpts, asyncValidator);
   }
 
-  public setValue(value: TGroupValues, options?: ControlOptions): void {
+  public setValue(value: TGroupValues, options?: ControlStateOptions): void {
     super.setValue(value, options);
   }
 
-  public patchValue(value: Partial<TGroupValues>, options?: ControlOptions): void {
+  public patchValue(value: Partial<TGroupValues>, options?: ControlStateOptions): void {
     super.patchValue(value, options);
   }
 
-  public enableDisable(enable: boolean, resetOnDisable = true, resetValue?: Partial<TGroupValues>, options?: ControlOptions): void {
+  public enableDisable(enable: boolean, resetOnDisable = true, resetValue?: Partial<TGroupValues>, options?: ControlStateOptions): void {
     enableDisableControl(this, enable, resetOnDisable, resetValue, options);
   }
 

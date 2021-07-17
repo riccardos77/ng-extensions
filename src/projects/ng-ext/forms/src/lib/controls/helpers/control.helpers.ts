@@ -1,12 +1,12 @@
 import { AbstractControl, AsyncValidatorFn, ValidatorFn } from '@angular/forms';
-import { ControlOptions } from '../models/controls.model';
+import { ControlStateOptions } from '../models/controls.model';
 
 export function enableDisableControl(
   control: AbstractControl,
   enable: boolean,
   resetOnDisable = true,
   resetValue?: any,
-  opts?: ControlOptions
+  opts?: ControlStateOptions
 ): void {
   if (enable) {
     if (!control.enabled) {

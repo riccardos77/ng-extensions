@@ -11,11 +11,5 @@ export class AppComponent {
 
   constructor() {
     const a = ValidatorsExt.fiscalCodePattern();
-
-    const b = [1, 2, 3].toObject<number>(
-      (n) => `k${n}`,
-      (n) => n * 2
-    );
-    console.log(b);
   }
 }

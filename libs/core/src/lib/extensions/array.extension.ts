@@ -1,8 +1,8 @@
-export {};
+export { };
 
 declare global {
   interface Array<T> {
-    toObject<TValue>(
+    convertToObject<TValue>(
       keyFunc: (item: T) => string,
       valueFunc: (item: T) => TValue,
       defaultValue?: { [key: string]: TValue }
@@ -10,7 +10,7 @@ declare global {
   }
 }
 
-Array.prototype.toObject = function <T, TValue>(
+Array.prototype.convertToObject = function <T, TValue>(
   this: Array<T>,
   keyFunc: (item: T) => string,
   valueFunc: (item: T) => TValue,

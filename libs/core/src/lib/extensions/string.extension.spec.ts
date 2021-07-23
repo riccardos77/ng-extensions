@@ -1,4 +1,4 @@
-import '../extensions/string.extension';
+import './string.extension';
 
 describe('string.extension', () => {
   it('convertToNumber - string with number', () => {

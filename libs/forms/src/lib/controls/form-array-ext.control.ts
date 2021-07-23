@@ -54,6 +54,12 @@ export class FormArrayExt<
     super.push(control);
   }
 
+  public pushAll(control: TControl[]): void {
+    if (control) {
+      control.forEach(c => this.push(c));
+    }
+  }
+
   public insert(index: number, control: TControl): void {
     super.insert(index, control);
   }

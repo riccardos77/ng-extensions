@@ -25,7 +25,9 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "publish-core": "ng build @ng-ext/core && pushd dist\\libs\\core && npm pack && popd",
+    "publish-forms": "ng build @ng-ext/forms && pushd dist\\libs\\forms && npm pack && popd"
   },
   "private": true,
   "dependencies": {

@@ -3,13 +3,15 @@
   text1: <input type="text" [formControl]="form.c.text1" />
   <br />
   num1: <input type="text" [formControl]="form.c.num1" />
-  <bR />
+  <br />
   date1:
-  <input
-    type="text"
-    [formControl]="form.c.date1"
-    [dateConverter]="'DD/MM/YYYY HH:mm'"
-  />
+  <input type="text" [formControl]="form.c.date1" [dateConverter]="'DD/MM/YYYY HH:mm'" />
+  <br />
+  <select placeholder="Selezionare un valore" placeholderValue="." (change)="selectChanged($event)">
+    <option value="a">value a</option>
+    <option value="b">value b</option>
+  </select>
+  {{selectSelectedValue}}
 
   <div [formGroup]="form.c.obj1">
     obj1.innerNum:

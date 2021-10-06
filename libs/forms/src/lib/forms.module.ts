@@ -1,9 +1,16 @@
 import { NgModule } from '@angular/core';
 import { InputTextDateValueConverterDirective } from './directives/input-text-date-value-converter.directive';
+import { SelectPlaceholderDirective } from './directives/select-placeholder.directive';
 
 @NgModule({
-  declarations: [InputTextDateValueConverterDirective],
+  declarations: [
+    InputTextDateValueConverterDirective,
+    SelectPlaceholderDirective
+  ],
   imports: [],
-  exports: [InputTextDateValueConverterDirective],
+  exports: [
+    InputTextDateValueConverterDirective,
+    SelectPlaceholderDirective
+  ],
 })
-export class NgExtFormsModule {}
+export class NgExtFormsModule { }

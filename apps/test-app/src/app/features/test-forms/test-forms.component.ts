@@ -9,6 +9,7 @@ import { FormArrayExt, FormControlExt, FormGroupExt } from '@ng-ext/forms';
 })
 export class TestFormsComponent {
   public form: FormGroupExt<TestFormValues, TestFormControls>;
+  public selectSelectedValue?: string;
 
   constructor(fb: FormBuilder) {
     this.form = new FormGroupExt<TestFormValues, TestFormControls>({
@@ -50,6 +51,10 @@ export class TestFormsComponent {
 
   public setDate(): void {
     this.form.c.date1.setValue(new Date());
+  }
+
+  public selectChanged(event: any): void {
+    this.selectSelectedValue = event.target.value;
   }
 }
 

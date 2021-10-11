@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "publish-core": "ng build @ng-ext/core && pushd dist\\libs\\core && npm pack && popd",
+    "publish-forms": "ng build @ng-ext/forms && pushd dist\\libs\\forms && npm pack && popd",
+    "publish-router": "ng build @ng-ext/router && pushd dist\\libs\\router && npm pack && popd",
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "nx": "nx",
@@ -25,9 +28,7 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "help": "nx help",
-    "publish-core": "ng build @ng-ext/core && pushd dist\\libs\\core && npm pack && popd",
-    "publish-forms": "ng build @ng-ext/forms && pushd dist\\libs\\forms && npm pack && popd"
+    "help": "nx help"
   },
   "private": true,
   "dependencies": {

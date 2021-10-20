@@ -16,37 +16,31 @@ export class LeavePageGuard implements CanDeactivate<ILeavePage>, OnDestroy {
     window.removeEventListener('beforeunload', this.beforeUnloadHandler);
   }
 
-  public canDeactivate(
-    component: ILeavePage,
-    currentRoute: ActivatedRouteSnapshot,
-    currentState: RouterStateSnapshot,
-    nextState?: RouterStateSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    return this.canLeavePage(component);
+  public canDeactivate(component: ILeavePage, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    if (component && component.canDeactivateRoute) {
+      return component.canDeactivateRoute(currentRoute, currentState, nextState);
+    } else {
+      return true;
+    }
   }
 
   private beforeUnloadHandler(event: BeforeUnloadEvent): void {
     const component = this.router.getActiveComponent<ILeavePage>();
 
-    if (component && !this.canLeavePage(component)) {
+    let canUnload = true;
+
+    if (component && component.canUnloadWindow) {
+      canUnload = component?.canUnloadWindow();
+    }
+
+    if (component && !canUnload) {
       event.preventDefault();
       event.returnValue = '';
-    }
-  }
-
-  private canLeavePage(component: ILeavePage): boolean {
-    if (component && component.canLeavePage) {
-      return component.canLeavePage();
-    } else {
-      return true;
     }
   }
 }
 
 export interface ILeavePage {
-  canLeavePage: () => boolean;
+  canUnloadWindow: () => boolean;
+  canDeactivateRoute: (currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 }

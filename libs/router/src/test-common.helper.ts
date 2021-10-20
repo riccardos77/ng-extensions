@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Routes } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Routes, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
 import { ILeavePage, LeavePageGuard } from './lib/guards/leave-page.guard';
 
 @Component({ template: '' })
@@ -9,7 +10,13 @@ export class TestHomeComponent { }
 export class TestLeavePageComponent implements ILeavePage {
   public canLeavePageValue = false;
 
-  public canLeavePage(): boolean { return this.canLeavePageValue; }
+  public canUnloadWindow(): boolean {
+    return this.canLeavePageValue;
+  }
+
+  public canDeactivateRoute(currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    return this.canLeavePageValue;
+  }
 }
 
 @Component({ template: `<router-outlet></router-outlet>` })

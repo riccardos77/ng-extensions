@@ -1,13 +1,14 @@
 
 export { };
 
+type KeyType<T> = Record<string | number, T>;
 declare global {
   interface Array<T> {
     convertToObject<TValue>(
-      keyFunc: (item: T) => string,
+      keyFunc: (item: T) => string | number,
       valueFunc: (item: T) => TValue,
-      defaultValue?: { [key: string]: TValue }
-    ): { [key: string]: TValue };
+      defaultValue?: Record<string | number, TValue>
+    ): Record<string | number, TValue>;
 
     merge(
       other: ArrayLike<T>,
@@ -19,10 +20,10 @@ declare global {
 
 Array.prototype.convertToObject = function <T, TValue>(
   this: Array<T>,
-  keyFunc: (item: T) => string,
+  keyFunc: (item: T) => string | number,
   valueFunc: (item: T) => TValue,
-  defaultValue: { [key: string]: TValue } = {}
-): { [key: string]: TValue } {
+  defaultValue: Record<string | number, TValue> = {}
+): Record<string | number, TValue> {
   if (this) {
     return this.reduce(
       (acc, item) => ({ ...acc, [keyFunc(item)]: valueFunc(item) }),

@@ -6,4 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
+
+  public clickOrDblclick(ev: MouseEvent): void {
+    alert(ev.type);
+  }
 }

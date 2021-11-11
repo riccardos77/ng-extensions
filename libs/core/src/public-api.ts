@@ -3,6 +3,7 @@ export * from './lib/classes/switch';
 export * from './lib/classes/switch-async';
 export * from './lib/controls/template-base.component';
 export * from './lib/core.module';
+export * from './lib/directives/mouse.directive';
 export * from './lib/directives/template-selector.directive';
 export * from './lib/extensions/array.extension';
 export * from './lib/extensions/date.extension';

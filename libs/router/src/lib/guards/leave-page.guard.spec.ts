@@ -1,9 +1,11 @@
 import { Location } from '@angular/common';
+import { Component } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, Routes, UrlTree } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TestAppComponent, TestHomeComponent, TestLeavePageComponent, testRoutes } from '../../test-common.helper';
+import { Observable } from 'rxjs';
 import '../extensions/router.extension';
+import { ILeavePage, LeavePageGuard } from '../guards/leave-page.guard';
 import { NgExtRouterModule } from '../router.module';
 
 describe('leave-page.guard', () => {
@@ -59,3 +61,27 @@ describe('leave-page.guard', () => {
     expect(location.path()).toBe('/leave-page-01');
   }));
 });
+
+@Component({ template: '' })
+class TestHomeComponent { }
+
+@Component({ template: '' })
+class TestLeavePageComponent implements ILeavePage {
+  public canLeavePageValue = false;
+
+  public canUnloadWindow(): boolean {
+    return this.canLeavePageValue;
+  }
+
+  public canDeactivateRoute(currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    return this.canLeavePageValue;
+  }
+}
+
+@Component({ template: `<router-outlet></router-outlet>` })
+class TestAppComponent { }
+
+const testRoutes: Routes = [
+  { path: 'home', component: TestHomeComponent },
+  { path: 'leave-page-01', component: TestLeavePageComponent, canDeactivate: [LeavePageGuard] },
+];

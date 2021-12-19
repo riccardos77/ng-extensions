@@ -1,0 +1,13 @@
+{
+  "name": "@ng-ext/router",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": ">= 12.0.0 < 14.0.0",
+    "@angular/core": ">= 12.0.0 < 14.0.0",
+    "@angular/router": ">= 12.0.0 < 14.0.0",
+    "rxjs": ">= 6.5.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}

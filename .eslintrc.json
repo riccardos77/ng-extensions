@@ -1,60 +1,57 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "**/*"
-  ],
-  "plugins": [
-    "@nrwl/nx"
-  ],
   "overrides": [
     {
       "files": [
-        "*.ts",
-        "*.tsx",
-        "*.js",
-        "*.jsx"
+        "*.ts"
+      ],
+      "parserOptions": {
+        "project": [
+          "tsconfig.app.json",
+          "tsconfig.spec.json",
+          "e2e/tsconfig.json"
+        ],
+        "createDefaultProgram": true
+      },
+      "extends": [
+        "plugin:@angular-eslint/recommended"
       ],
       "rules": {
-        "@nrwl/nx/enforce-module-boundaries": [
+        /**
+         * Any TypeScript source code (NOT TEMPLATE) related rules you wish to use/reconfigure over and above the
+         * recommended set provided by the @angular-eslint project would go here.
+         */
+        "@angular-eslint/directive-selector": [
           "error",
           {
-            "enforceBuildableLibDependency": true,
-            "allow": [],
-            "depConstraints": [
-              {
-                "sourceTag": "*",
-                "onlyDependOnLibsWithTags": [
-                  "*"
-                ]
-              }
-            ]
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "app",
+            "style": "kebab-case"
           }
         ]
       }
     },
     {
       "files": [
-        "*.ts",
-        "*.tsx"
+        "*.html"
       ],
       "extends": [
-        "plugin:@nrwl/nx/typescript"
+        "plugin:@angular-eslint/template/recommended"
       ],
       "rules": {
-        "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": "off",
-        "@typescript-eslint/no-non-null-assertion": "off"
+        /**
+         * Any template/HTML related rules you wish to use/reconfigure over and above the
+         * recommended set provided by the @angular-eslint project would go here.
+         */
       }
-    },
-    {
-      "files": [
-        "*.js",
-        "*.jsx"
-      ],
-      "extends": [
-        "plugin:@nrwl/nx/javascript"
-      ],
-      "rules": {}
     }
   ]
 }

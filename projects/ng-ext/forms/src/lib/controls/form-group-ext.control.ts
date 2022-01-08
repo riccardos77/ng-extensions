@@ -39,15 +39,20 @@ export class FormGroupExt<
     super(controls, validatorOrOpts, asyncValidator);
   }
 
-  public override setValue(value: TGroupValues, options?: ControlStateOptions): void {
+  public override setValue(
+    value: TGroupValues,
+    options?: ControlStateOptions
+  ): FormGroupExt<TGroupValues, TGroupControls> {
     super.setValue(value, options);
+    return this;
   }
 
   public override patchValue(
     value: Partial<TGroupValues>,
     options?: ControlStateOptions
-  ): void {
+  ): FormGroupExt<TGroupValues, TGroupControls> {
     super.patchValue(value, options);
+    return this;
   }
 
   public enableDisable(
@@ -55,31 +60,34 @@ export class FormGroupExt<
     resetOnDisable = true,
     resetValue?: Partial<TGroupValues>,
     options?: ControlStateOptions
-  ): void {
+  ): FormGroupExt<TGroupValues, TGroupControls> {
     enableDisableControl(this, enable, resetOnDisable, resetValue, options);
+    return this;
   }
 
   public suspendResumeValidators(
     suspend: boolean,
     enforceOnResume = true
-  ): void {
+  ): FormGroupExt<TGroupValues, TGroupControls> {
     this.suspendedValidator = suspendResumeValidators(
       this,
       this.suspendedValidator,
       suspend,
       enforceOnResume
     );
+    return this;
   }
 
   public suspendResumeAsyncValidators(
     suspend: boolean,
     enforceOnResume = true
-  ): void {
+  ): FormGroupExt<TGroupValues, TGroupControls> {
     this.suspendedAsyncValidator = suspendResumeAsyncValidators(
       this,
       this.suspendedAsyncValidator,
       suspend,
       enforceOnResume
     );
+    return this;
   }
 }

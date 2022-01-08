@@ -24,7 +24,7 @@ export abstract class FormControlBaseComponent<
   private onValidatorChangeFn?: () => void;
   private valueChangedSubscription?: Subscription;
   private statusChangedSubscription?: Subscription;
-  private initFormOn: InitFormOn = 'initForm';
+  private initFormOn: InitFormOn = 'setupForm';
   private initFormFn?: () => FormGroupExt<TFormValues, TFormControls>;
   private modelToFormFn?: (model: TModel) => Observable<TFormValues>;
   private formToModelFn?: (values: TFormValues) => Observable<TModel>;
@@ -92,11 +92,11 @@ export abstract class FormControlBaseComponent<
     this.onValidatorChangeFn = fn;
   }
 
-  protected initForm(
+  protected setupForm(
     initFormFn: () => FormGroupExt<TFormValues, TFormControls>,
     modelToFormFn: (model: TModel) => Observable<TFormValues>,
     formToModelFn: (values: TFormValues) => Observable<TModel>,
-    initFormOn: InitFormOn = 'initForm'
+    initFormOn: InitFormOn = 'setupForm'
   ): void {
     if (initFormFn) {
       this.initFormOn = initFormOn;
@@ -104,7 +104,7 @@ export abstract class FormControlBaseComponent<
       this.modelToFormFn = modelToFormFn;
       this.formToModelFn = formToModelFn;
 
-      if (initFormOn === 'initForm') {
+      if (initFormOn === 'setupForm') {
         this.doInitForm();
         this.statusChanged = true;
       }

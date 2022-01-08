@@ -1,4 +1,4 @@
-export type InitFormOn = 'initForm' | 'ngOnInit';
+export type InitFormOn = 'setupForm' | 'ngOnInit';
 
 export interface ControlStateOptions {
   onlySelf?: boolean;

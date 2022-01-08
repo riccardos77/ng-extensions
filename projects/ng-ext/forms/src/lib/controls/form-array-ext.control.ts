@@ -38,34 +38,46 @@ export class FormArrayExt<
     super(controls, validatorOrOpts, asyncValidator);
   }
 
-  public override setValue(value: TValueArray, options?: ControlValueOptions): void {
+  public override setValue(
+    value: TValueArray,
+    options?: ControlValueOptions
+  ): FormArrayExt<TValueArray, TValue, TControl> {
     super.setValue(value, options);
+    return this;
   }
 
-  public override patchValue(value: TValueArray, options?: ControlValueOptions): void {
+  public override patchValue(
+    value: TValueArray,
+    options?: ControlValueOptions
+  ): FormArrayExt<TValueArray, TValue, TControl> {
     super.patchValue(value, options);
+    return this;
   }
 
   public override at(index: number): TControl {
     return super.at(index) as TControl;
   }
 
-  public override push(control: TControl): void {
+  public override push(control: TControl): FormArrayExt<TValueArray, TValue, TControl> {
     super.push(control);
+    return this;
   }
 
-  public pushAll(control: TControl[]): void {
+  public pushAll(control: TControl[]): FormArrayExt<TValueArray, TValue, TControl> {
     if (control) {
       control.forEach(c => this.push(c));
     }
+    return this;
   }
 
-  public override insert(index: number, control: TControl): void {
+  public override insert(index: number, control: TControl): FormArrayExt<TValueArray, TValue, TControl> {
     super.insert(index, control);
+    return this;
   }
 
-  public override setControl(index: number, control: TControl): void {
+  public override setControl(index: number, control: TControl): FormArrayExt<TValueArray, TValue, TControl> {
     super.setControl(index, control);
+    return this;
   }
 
   public enableDisable(
@@ -73,31 +85,34 @@ export class FormArrayExt<
     resetOnDisable = true,
     resetValue?: TValue,
     options?: ControlStateOptions
-  ): void {
+  ): FormArrayExt<TValueArray, TValue, TControl> {
     enableDisableControl(this, enable, resetOnDisable, resetValue, options);
+    return this;
   }
 
   public suspendResumeValidators(
     suspend: boolean,
     enforceOnResume = true
-  ): void {
+  ): FormArrayExt<TValueArray, TValue, TControl> {
     this.suspendedValidator = suspendResumeValidators(
       this,
       this.suspendedValidator,
       suspend,
       enforceOnResume
     );
+    return this;
   }
 
   public suspendResumeAsyncValidators(
     suspend: boolean,
     enforceOnResume = true
-  ): void {
+  ): FormArrayExt<TValueArray, TValue, TControl> {
     this.suspendedAsyncValidator = suspendResumeAsyncValidators(
       this,
       this.suspendedAsyncValidator,
       suspend,
       enforceOnResume
     );
+    return this;
   }
 }

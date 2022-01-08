@@ -22,12 +22,20 @@ export class FormControlExt<TValue> extends FormControl {
     super(formState, validatorOrOpts, asyncValidator);
   }
 
-  public override setValue(value: TValue, options?: ControlValueOptions): void {
+  public override setValue(
+    value: TValue,
+    options?: ControlValueOptions
+  ): FormControlExt<TValue> {
     super.setValue(value, options);
+    return this;
   }
 
-  public override patchValue(value: TValue, options?: ControlValueOptions): void {
+  public override patchValue(
+    value: TValue,
+    options?: ControlValueOptions
+  ): FormControlExt<TValue> {
     super.patchValue(value, options);
+    return this;
   }
 
   public enableDisable(
@@ -35,31 +43,34 @@ export class FormControlExt<TValue> extends FormControl {
     resetOnDisable = true,
     resetValue?: TValue,
     options?: ControlStateOptions
-  ): void {
+  ): FormControlExt<TValue> {
     enableDisableControl(this, enable, resetOnDisable, resetValue, options);
+    return this;
   }
 
   public suspendResumeValidators(
     suspend: boolean,
     enforceOnResume = true
-  ): void {
+  ): FormControlExt<TValue> {
     this.suspendedValidator = suspendResumeValidators(
       this,
       this.suspendedValidator,
       suspend,
       enforceOnResume
     );
+    return this;
   }
 
   public suspendResumeAsyncValidators(
     suspend: boolean,
     enforceOnResume = true
-  ): void {
+  ): FormControlExt<TValue> {
     this.suspendedAsyncValidator = suspendResumeAsyncValidators(
       this,
       this.suspendedAsyncValidator,
       suspend,
       enforceOnResume
     );
+    return this;
   }
 }

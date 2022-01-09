@@ -1,4 +1,4 @@
-import { HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 export function getAttachmentFileName(headers: HttpHeaders): string | undefined {
   const cdValue = headers.get('Content-Disposition');
@@ -37,4 +37,23 @@ export function encodeUriQuery(s: string): string {
     .replace(/%24/g, '$')
     .replace(/%2C/gi, ',')
     .replace(/%3B/gi, ';');
+}
+
+export function isHttpError<T>(err: Error, checkStatus: number, checkContent?: (error: T) => boolean): boolean {
+  if (err instanceof HttpErrorResponse) {
+    if (checkContent) {
+      const errorContent = err.error as T;
+      if (err.status === checkStatus && errorContent && checkContent(errorContent)) {
+        return true;
+      }
+    } else {
+      return err.status === checkStatus;
+    }
+  }
+
+  return false;
+}
+
+export function isHttpErrorString(err: Error, checkStatus: number, checkContent: string): boolean {
+  return isHttpError<string>(err, checkStatus, e => e === checkContent);
 }

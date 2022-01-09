@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, FormBuilder, ValidationErrors, Validator } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { FormArrayExt } from './form-array-ext.control';
 import { FormControlExt } from './form-control-ext.control';
@@ -25,18 +25,26 @@ export abstract class FormControlBaseComponent<
   private valueChangedSubscription?: Subscription;
   private statusChangedSubscription?: Subscription;
   private initFormOn: InitFormOn = 'setupForm';
-  private initFormFn?: () => FormGroupExt<TFormValues, TFormControls>;
+  private initFormFn?: () => FormGroupExt<TFormValues, TFormControls> | TFormControls;
   private modelToFormFn?: (model: TModel) => Observable<TFormValues>;
   private formToModelFn?: (values: TFormValues) => Observable<TModel>;
   private statusChanged = false;
+  private _form?: FormGroupExt<TFormValues, TFormControls>;
 
-  public form?: FormGroupExt<TFormValues, TFormControls>;
+  public get form(): FormGroupExt<TFormValues, TFormControls> {
+    if (this._form) {
+      return this._form;
+    } else {
+      throw new Error('Control not initialized');
+    }
+  }
+
   public get formInitialized(): boolean {
     return this.formInitialized$.value;
   }
   public formInitialized$ = new BehaviorSubject<boolean>(false);
 
-  constructor(protected fb: FormBuilder) { }
+  constructor() { }
 
   public ngOnInit(): void {
     if (this.initFormOn === 'ngOnInit') {
@@ -93,7 +101,7 @@ export abstract class FormControlBaseComponent<
   }
 
   protected setupForm(
-    initFormFn: () => FormGroupExt<TFormValues, TFormControls>,
+    initFormFn: () => FormGroupExt<TFormValues, TFormControls> | TFormControls,
     modelToFormFn: (model: TModel) => Observable<TFormValues>,
     formToModelFn: (values: TFormValues) => Observable<TModel>,
     initFormOn: InitFormOn = 'setupForm'
@@ -131,7 +139,14 @@ export abstract class FormControlBaseComponent<
 
   private doInitForm(): void {
     if (this.initFormFn) {
-      this.form = this.initFormFn();
+      const initFormResult = this.initFormFn();
+
+      if (initFormResult instanceof FormGroupExt) {
+        this._form = initFormResult;
+      } else {
+        this._form = new FormGroupExt<TFormValues, TFormControls>(initFormResult);
+      }
+
       this.valueChangedSubscription = this.form.valueChanges.subscribe(
         (values) => this.formUpdated()
       );

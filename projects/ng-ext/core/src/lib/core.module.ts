@@ -1,15 +1,18 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { MouseDirective } from './directives/mouse.directive';
 import { TemplateSelectorDirective } from './directives/template-selector.directive';
+import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
+  imports: [],
   declarations: [
     MouseDirective,
+    SafePipe,
     TemplateSelectorDirective
   ],
-  imports: [],
   exports: [
     MouseDirective,
+    SafePipe,
     TemplateSelectorDirective
   ],
 })

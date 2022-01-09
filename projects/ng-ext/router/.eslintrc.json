@@ -20,7 +20,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "ng-ext",
+            "prefix": "ngExt",
             "style": "camelCase"
           }
         ],

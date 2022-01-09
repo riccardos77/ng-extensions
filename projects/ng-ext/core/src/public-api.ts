@@ -10,5 +10,6 @@ export * from './lib/extensions/date.extension';
 export * from './lib/extensions/rxjs-observer.extension';
 export * from './lib/extensions/string.extension';
 export * from './lib/helpers/http.helper';
+export * from './lib/helpers/template-base.helper';
 export * from './lib/http-interceptors/json-reviver.interceptor';
 export * from './lib/pipes/safe.pipe';

@@ -1,26 +1,23 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { AfterContentInit, Component, ContentChildren, QueryList, TemplateRef } from '@angular/core';
-import { TemplateSelectorDirective } from '../directives/template-selector.directive';
+import { AfterContentInit, Component, ContentChildren, Inject, InjectionToken, QueryList } from '@angular/core';
+import { TemplateDefinition, TemplateSelectorDirective } from '../directives/template-selector.directive';
+import { getTemplateContext, getTemplateRef, templateAfterContentInit } from '../helpers/template-base.helper';
+
+const token = new InjectionToken('TemplateDefs');
 
 @Component({ template: '' })
 export abstract class TemplateBaseComponent<
-  TTemplateNames extends string,
-  TTemplateRefs extends { [key: string]: TemplateRef<any> | null } = {
-    [key in TTemplateNames]: TemplateRef<any> | null;
-  }
+  TTemplateDefinitions extends { [key: string]: TemplateDefinition<any> | null }
   > implements AfterContentInit {
 
   @ContentChildren(TemplateSelectorDirective)
-  public templates?: QueryList<TemplateSelectorDirective>;
+  public templateSelectors?: QueryList<TemplateSelectorDirective<any>>;
 
-  public templateRefs: TTemplateRefs = {} as TTemplateRefs;
+  constructor(@Inject(token) public templates: TTemplateDefinitions) { }
 
   public ngAfterContentInit(): void {
-    this.templates?.forEach((item) => {
-      const name = item.getType();
-      if (name) {
-        (this.templateRefs as any)[name] = item.template;
-      }
-    });
+    templateAfterContentInit(this.templateSelectors, this.templates);
   }
+
+  public getTemplateRef = getTemplateRef;
+  public getTemplateContext = getTemplateContext;
 }

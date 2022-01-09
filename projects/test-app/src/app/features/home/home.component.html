@@ -1,9 +1,9 @@
 <p>home works!</p>
-<app-test-template>
-  <ng-template [templateSelector]="'t1'" let-input="ctx1">
+<app-test-template #tt>
+  <ng-template [templateSelector]="tt.templates.t1" let-input>
     <span> template 1 {{ input.text }} / {{ input.number }}</span>
   </ng-template>
-  <ng-template templateSelector="t2">
+  <ng-template [templateSelector]="tt.templates.t2">
     <span> template 2</span>
   </ng-template>
 </app-test-template>

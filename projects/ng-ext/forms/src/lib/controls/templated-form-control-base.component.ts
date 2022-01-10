@@ -1,11 +1,9 @@
-import { AfterContentInit, Component, ContentChildren, Inject, InjectionToken, QueryList } from '@angular/core';
+import { AfterContentInit, Component, ContentChildren, QueryList } from '@angular/core';
 import { getTemplateContext, getTemplateRef, templateAfterContentInit, TemplateDefinition, TemplateSelectorDirective } from '@ng-ext/core';
 import { FormArrayExt } from './form-array-ext.control';
 import { FormControlBaseComponent } from './form-control-base.component';
 import { FormControlExt } from './form-control-ext.control';
 import { FormGroupExt } from './form-group-ext.control';
-
-const token = new InjectionToken('TemplateDefs');
 
 @Component({ template: '' })
 export abstract class TemplatedFormControlBaseComponent<
@@ -23,9 +21,14 @@ export abstract class TemplatedFormControlBaseComponent<
   @ContentChildren(TemplateSelectorDirective)
   public templateSelectors?: QueryList<TemplateSelectorDirective<any>>;
 
-  constructor(@Inject(token) public templates: TTemplateDefinitions) {
+  public templates: TTemplateDefinitions
+
+  constructor() {
     super();
+    this.templates = this.initTemplates();
   }
+
+  abstract initTemplates(): TTemplateDefinitions;
 
   public ngAfterContentInit(): void {
     templateAfterContentInit(this.templateSelectors, this.templates);

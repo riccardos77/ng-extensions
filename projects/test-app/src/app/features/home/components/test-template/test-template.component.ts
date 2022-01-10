@@ -10,8 +10,9 @@ export class TestTemplateComponent extends TemplateBaseComponent<{
   t1: TemplateDefinition<ContextT1>,
   t2: TemplateDefinition<any>
 }> implements OnInit {
-  constructor() {
-    super({ t1: { name: 't1' }, t2: { name: 't2' } });
+
+  override initTemplates(): { t1: TemplateDefinition<ContextT1>, t2: TemplateDefinition<any> } {
+    return { t1: { name: 't1' }, t2: { name: 't2' } };
   }
 
   public ngOnInit(): void {

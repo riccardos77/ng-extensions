@@ -4,14 +4,17 @@
   "compilerOptions": {
     "paths": {
       "@ng-ext/core": [
+        //"projects/ng-ext/core/src/public-api.ts",
         "dist/ng-ext/core/ng-ext-core",
         "dist/ng-ext/core"
       ],
       "@ng-ext/forms": [
+        // "projects/ng-ext/forms/src/public-api.ts",
         "dist/ng-ext/forms/ng-ext-forms",
         "dist/ng-ext/forms"
       ],
       "@ng-ext/router": [
+        // "projects/ng-ext/router/src/public-api.ts",
         "dist/ng-ext/router/ng-ext-router",
         "dist/ng-ext/router"
       ]

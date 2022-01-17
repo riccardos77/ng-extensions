@@ -20,3 +20,7 @@ export function getTemplateRef<T>(def: TemplateDefinition<T> | undefined, fallba
 export function getTemplateContext<T>(def: TemplateDefinition<T> | undefined): T | null {
   return def?.context ?? null;
 }
+
+export function hasTemplateRef<T>(def: TemplateDefinition<T> | undefined): boolean {
+  return !!def?.ref ?? false;
+}

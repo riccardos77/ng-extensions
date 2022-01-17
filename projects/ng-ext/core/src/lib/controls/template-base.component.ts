@@ -1,6 +1,6 @@
 import { AfterContentInit, Component, ContentChildren, QueryList } from '@angular/core';
 import { TemplateDefinition, TemplateSelectorDirective } from '../directives/template-selector.directive';
-import { getTemplateContext, getTemplateRef, templateAfterContentInit } from '../helpers/template-base.helper';
+import { getTemplateContext, getTemplateRef, hasTemplateRef, templateAfterContentInit } from '../helpers/template-base.helper';
 
 @Component({ template: '' })
 export abstract class TemplateBaseComponent<
@@ -25,4 +25,5 @@ export abstract class TemplateBaseComponent<
 
   public getTemplateRef = getTemplateRef;
   public getTemplateContext = getTemplateContext;
+  public hasTemplateRef = hasTemplateRef;
 }

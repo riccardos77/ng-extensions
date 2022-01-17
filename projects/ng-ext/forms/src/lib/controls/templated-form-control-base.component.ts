@@ -1,5 +1,5 @@
 import { AfterContentInit, Component, ContentChildren, QueryList } from '@angular/core';
-import { getTemplateContext, getTemplateRef, templateAfterContentInit, TemplateDefinition, TemplateSelectorDirective } from '@ng-ext/core';
+import { getTemplateContext, getTemplateRef, hasTemplateRef, templateAfterContentInit, TemplateDefinition, TemplateSelectorDirective } from '@ng-ext/core';
 import { FormArrayExt } from './form-array-ext.control';
 import { FormControlBaseComponent } from './form-control-base.component';
 import { FormControlExt } from './form-control-ext.control';
@@ -36,4 +36,5 @@ export abstract class TemplatedFormControlBaseComponent<
 
   public getTemplateRef = getTemplateRef;
   public getTemplateContext = getTemplateContext;
+  public hasTemplateRef = hasTemplateRef;
 }

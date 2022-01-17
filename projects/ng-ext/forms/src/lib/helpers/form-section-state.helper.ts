@@ -12,7 +12,7 @@ export const FormSectionStates = {
   hiddenValueForbidden: 'hiddenValueForbidden' as FormSectionState
 };
 
-export function manageSectionControls(controls: AbstractControl[], sectionState: FormSectionState, additionalValidators: ValidatorFn[] = []): void {
+export function manageSectionControls(controls: AbstractControl[], sectionState: FormSectionState, additionalValidators: ValidatorFn[] = [], resetValue?: any): void {
   controls.forEach(c => {
     switch (sectionState) {
       case FormSectionStates.enabledRequired:
@@ -30,7 +30,7 @@ export function manageSectionControls(controls: AbstractControl[], sectionState:
         break;
       case FormSectionStates.hiddenValueForbidden:
       case FormSectionStates.readOnlyValueForbidden:
-        enableDisableControl(c, false, true);
+        enableDisableControl(c, false, true, resetValue);
         c.clearValidators();
         break;
     }

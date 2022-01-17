@@ -4,7 +4,7 @@
   "compilerOptions": {
     "paths": {
       "@ng-ext/core": [
-        //"projects/ng-ext/core/src/public-api.ts",
+        // "projects/ng-ext/core/src/public-api.ts",
         "dist/ng-ext/core/ng-ext-core",
         "dist/ng-ext/core"
       ],

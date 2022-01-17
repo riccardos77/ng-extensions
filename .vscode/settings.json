@@ -16,5 +16,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.tslint": false
   },
-  "jest.jestCommandLine": "npx jest"
+  "jest.jestCommandLine": "npx jest",
+  "jest.autoRun": "off"
 }

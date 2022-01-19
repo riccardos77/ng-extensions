@@ -18,12 +18,14 @@ export class Switch<TValue> {
 
 class SwitchExecutor<TValue, TResult> implements SwitchCase<TValue, TResult>, SwitchDefaultCase<TResult> {
   private foundResult: TResult | undefined;
+  private caseFound = false;
 
   constructor(private valueToEvaluate: TValue) {
   }
 
   case(caseEvaluator: (value: TValue) => boolean, caseResult: (value: TValue) => TResult): SwitchCase<TValue, TResult> {
-    if (!this.foundResult && caseEvaluator(this.valueToEvaluate)) {
+    if (!this.caseFound && caseEvaluator(this.valueToEvaluate)) {
+      this.caseFound = true;
       this.foundResult = caseResult(this.valueToEvaluate);
     }
 
@@ -31,7 +33,8 @@ class SwitchExecutor<TValue, TResult> implements SwitchCase<TValue, TResult>, Sw
   }
 
   caseTyped<TValue2 extends TValue>(typeEvaluator: (value: TValue) => value is TValue2, caseEvaluator: (value: TValue2) => boolean, caseResult: (value: TValue2) => TResult): SwitchCase<TValue, TResult> {
-    if (!this.foundResult && typeEvaluator(this.valueToEvaluate) && caseEvaluator(this.valueToEvaluate)) {
+    if (!this.caseFound && typeEvaluator(this.valueToEvaluate) && caseEvaluator(this.valueToEvaluate)) {
+      this.caseFound = true;
       this.foundResult = caseResult(this.valueToEvaluate);
     }
 
@@ -39,7 +42,7 @@ class SwitchExecutor<TValue, TResult> implements SwitchCase<TValue, TResult>, Sw
   }
 
   default(caseResult: (value: TValue) => TResult): SwitchDefaultCase<TResult> {
-    if (!this.foundResult) {
+    if (!this.caseFound) {
       this.foundResult = caseResult(this.valueToEvaluate);
     }
 

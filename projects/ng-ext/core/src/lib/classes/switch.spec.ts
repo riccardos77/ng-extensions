@@ -45,6 +45,15 @@ describe('switch.class', () => {
     expect(result).toBe('def');
   });
 
+  it('case returns null as result', () => {
+    const result = Switch.from(1)
+      .case<string | null>(i => i === 1, i => null)
+      .default(i => 'def')
+      .execute();
+
+    expect(result).toBeNull();
+  });
+
   it('case with type guard in first case', () => {
     const a: TestType1 = { stringValue: 'abc', numberValue: 123 } as TestType2;
     const result = Switch.from(a)

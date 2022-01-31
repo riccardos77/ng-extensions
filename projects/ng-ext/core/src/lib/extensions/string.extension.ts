@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/method-signature-style */
+
 import moment from 'moment';
 
 export { };
@@ -5,14 +7,11 @@ export { };
 declare global {
   interface String {
     convertToDate(momentFormat: string): Date | undefined;
-    convertToNumber(
-      radix?: number,
-      treatNanAsUndefined?: boolean
-    ): number | undefined;
+    convertToNumber(format?: 'integer', treatNanAsUndefined?: boolean, strictCheck?: boolean, radix?: number): number | undefined;
+    convertToNumber(format?: 'float', treatNanAsUndefined?: boolean): number | undefined;
   }
 }
 
-// tslint:disable-next-line:space-before-function-paren
 String.prototype.convertToDate = function (
   this: string,
   momentFormat: string
@@ -24,14 +23,24 @@ String.prototype.convertToDate = function (
   }
 };
 
-// tslint:disable-next-line:space-before-function-paren
 String.prototype.convertToNumber = function (
   this: string,
-  radix: number = 10,
-  treatNanAsUndefined: boolean = true
+  format: 'float' | 'integer' = 'integer',
+  treatNanAsUndefined: boolean = true,
+  strictCheck: boolean = true,
+  radix: number = 10
 ): number | undefined {
   if (this !== undefined) {
-    const result = parseInt(this, radix);
+    let result = NaN;
+
+    if (format === 'integer') {
+      if (!strictCheck || /^[-+]?\d+$/.test(this)) {
+        result = parseInt(this, radix);
+      }
+    } else {
+      result = parseFloat(this);
+    }
+
     if (isNaN(result) && treatNanAsUndefined) {
       return undefined;
     } else {
@@ -40,4 +49,6 @@ String.prototype.convertToNumber = function (
   } else {
     return undefined;
   }
+
+
 };

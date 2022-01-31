@@ -4,16 +4,15 @@ export { };
 
 declare module '@angular/router' {
   interface Router {
-    getActiveComponent<T>(): T | undefined;
+    getActiveComponent: <T>() => T | undefined;
   }
 }
 
-// tslint:disable-next-line:space-before-function-paren
 Router.prototype.getActiveComponent = function <T>(
   this: Router
 ): T | undefined {
-  if (this) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (this !== undefined) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
     const rootContexts = (this as any).rootContexts as ChildrenOutletContexts;
     return rootContexts.getContext(this.routerState.root.outlet)?.outlet?.component as T;
   } else {

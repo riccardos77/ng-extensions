@@ -3,9 +3,9 @@ import { DomSanitizer, SafeHtml, SafeResourceUrl, SafeScript, SafeStyle, SafeUrl
 
 @Pipe({ name: 'safe' })
 export class SafePipe implements PipeTransform {
-  constructor(protected sanitizer: DomSanitizer) { }
+  public constructor(protected sanitizer: DomSanitizer) { }
 
-  public transform(value: string, type: string): SafeHtml | SafeStyle | SafeScript | SafeUrl | SafeResourceUrl {
+  public transform(value: string, type: string): SafeHtml | SafeResourceUrl | SafeScript | SafeStyle | SafeUrl {
     switch (type) {
       case 'html':
         return this.sanitizer.bypassSecurityTrustHtml(value);

@@ -9,16 +9,16 @@ export class SelectPlaceholderDirective implements OnChanges, AfterContentInit {
   private placeholderOption: HTMLOptionElement;
   private className = 'select-placeholder-directive';
 
-  constructor(private el: ElementRef<HTMLSelectElement>) {
+  public constructor(private el: ElementRef<HTMLSelectElement>) {
     this.placeholderOption = this.createPlaceholderOption();
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['placeholder']) {
+    if (changes['placeholder'] !== undefined) {
       this.placeholderOption.text = this.placeholder ?? '';
     }
 
-    if (changes['placeholderValue']) {
+    if (changes['placeholderValue'] !== undefined) {
       this.placeholderOption.value = this.placeholderValue ?? '';
     }
   }
@@ -36,7 +36,7 @@ export class SelectPlaceholderDirective implements OnChanges, AfterContentInit {
     const styleName = `${this.className}-style`;
     let style = document.getElementById(styleName) as HTMLStyleElement;
 
-    if (!style) {
+    if (style !== undefined) {
       style = document.createElement('style');
       style.id = styleName;
       document.head.appendChild(style);

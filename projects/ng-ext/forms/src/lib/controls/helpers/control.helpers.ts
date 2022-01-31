@@ -6,7 +6,7 @@ export function enableDisableControl(
   control: AbstractControl,
   enable: boolean,
   resetOnDisable = true,
-  resetValue?: any,
+  resetValue?: unknown,
   opts?: ControlStateOptions
 ): void {
   if (enable) {

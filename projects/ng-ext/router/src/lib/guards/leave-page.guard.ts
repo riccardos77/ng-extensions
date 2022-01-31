@@ -5,7 +5,7 @@ import '../extensions/router.extension';
 
 @Injectable()
 export class LeavePageGuard implements CanDeactivate<ILeavePage>, OnDestroy {
-  constructor(private router: Router) {
+  public constructor(private router: Router) {
     window.addEventListener(
       'beforeunload',
       this.beforeUnloadHandler.bind(this)
@@ -13,11 +13,11 @@ export class LeavePageGuard implements CanDeactivate<ILeavePage>, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    window.removeEventListener('beforeunload', this.beforeUnloadHandler);
+    window.removeEventListener('beforeunload', this.beforeUnloadHandler.bind(this));
   }
 
-  public canDeactivate(component: ILeavePage, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (component && component.canDeactivateRoute) {
+  public canDeactivate(component: ILeavePage, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<UrlTree | boolean> | Promise<UrlTree | boolean> | UrlTree | boolean {
+    if (component?.canDeactivateRoute !== undefined) {
       return component.canDeactivateRoute(currentRoute, currentState, nextState);
     } else {
       return true;
@@ -29,7 +29,7 @@ export class LeavePageGuard implements CanDeactivate<ILeavePage>, OnDestroy {
 
     let canUnload = true;
 
-    if (component && component.canUnloadWindow) {
+    if (component?.canUnloadWindow !== undefined) {
       canUnload = component?.canUnloadWindow();
     }
 
@@ -42,5 +42,5 @@ export class LeavePageGuard implements CanDeactivate<ILeavePage>, OnDestroy {
 
 export interface ILeavePage {
   canUnloadWindow: () => boolean;
-  canDeactivateRoute: (currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
+  canDeactivateRoute: (currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot) => Observable<UrlTree | boolean> | Promise<UrlTree | boolean> | UrlTree | boolean;
 }

@@ -117,10 +117,14 @@ describe('array.extension', () => {
       { id: 3, value: 'c' }
     ];
 
-    const conflictFn = (i: MergeInput, o: MergeInput) => ({ id: i.id, value: o.value, otherProp: `${i.otherProp}_${o.otherProp}` } as MergeInput);
+    const conflictFn = (i: MergeInput, o: MergeInput): MergeInput => ({ id: i.id, value: o.value, otherProp: `${i.otherProp ?? ''}_${o.otherProp ?? ''}` } as MergeInput);
     expect(input1.merge(input2, 'id', conflictFn)).toStrictEqual(expectedResult);
     expect(input1.merge(input2, a => a.id, conflictFn)).toStrictEqual(expectedResult);
   });
 });
 
-type MergeInput = { id: number, value: string, otherProp?: string };
+interface MergeInput {
+  id: number;
+  value: string;
+  otherProp?: string;
+}

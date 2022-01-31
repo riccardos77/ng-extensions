@@ -1,7 +1,7 @@
 import { QueryList, TemplateRef } from '@angular/core';
 import { TemplateDefinition, TemplateSelectorDirective } from '../directives/template-selector.directive';
 
-export function templateAfterContentInit(templateSelectors: QueryList<TemplateSelectorDirective<any>> | undefined, templates: { [key: string]: TemplateDefinition<any> | null }): void {
+export function templateAfterContentInit(templateSelectors: QueryList<TemplateSelectorDirective> | undefined, templates: Record<string, TemplateDefinition | null>): void {
   templateSelectors?.forEach((item) => {
     const name = item.name;
     if (name) {
@@ -13,7 +13,7 @@ export function templateAfterContentInit(templateSelectors: QueryList<TemplateSe
   });
 }
 
-export function getTemplateRef<T>(def: TemplateDefinition<T> | undefined, fallbackTemplateRef?: TemplateRef<any>): TemplateRef<any> | null {
+export function getTemplateRef<T>(def: TemplateDefinition<T> | undefined, fallbackTemplateRef?: TemplateRef<unknown>): TemplateRef<unknown> | null {
   return def?.ref ?? fallbackTemplateRef ?? null;
 }
 

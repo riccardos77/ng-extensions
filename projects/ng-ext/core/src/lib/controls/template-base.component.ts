@@ -1,29 +1,28 @@
-import { AfterContentInit, Component, ContentChildren, QueryList } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, ContentChildren, QueryList } from '@angular/core';
 import { TemplateDefinition, TemplateSelectorDirective } from '../directives/template-selector.directive';
 import { getTemplateContext, getTemplateRef, hasTemplateRef, templateAfterContentInit } from '../helpers/template-base.helper';
 
-@Component({ template: '' })
-export abstract class TemplateBaseComponent<
-  TTemplateDefinitions extends { [key: string]: TemplateDefinition<any> | null }
-  > implements AfterContentInit {
-
+// eslint-disable-next-line @angular-eslint/use-component-selector
+@Component({
+  template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export abstract class TemplateBaseComponent<TTemplateDefinitions extends { [key in keyof TTemplateDefinitions]: TemplateDefinition | null }> implements AfterContentInit {
   @ContentChildren(TemplateSelectorDirective)
-  public templateSelectors?: QueryList<TemplateSelectorDirective<any>>;
+  public templateSelectors?: QueryList<TemplateSelectorDirective>;
+  public getTemplateRef = getTemplateRef;
+  public getTemplateContext = getTemplateContext;
+  public hasTemplateRef = hasTemplateRef;
 
-  public templates: TTemplateDefinitions
+  public templates: TTemplateDefinitions;
 
-  constructor() {
+  public constructor() {
     this.templates = this.initTemplates();
   }
-
-  abstract initTemplates(): TTemplateDefinitions;
-
 
   public ngAfterContentInit(): void {
     templateAfterContentInit(this.templateSelectors, this.templates);
   }
 
-  public getTemplateRef = getTemplateRef;
-  public getTemplateContext = getTemplateContext;
-  public hasTemplateRef = hasTemplateRef;
+  protected abstract initTemplates(): TTemplateDefinitions;
 }

@@ -181,15 +181,6 @@
           "options": {
             "browserTarget": "test-app:build"
           }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/test-app/**/*.ts",
-              "projects/test-app/**/*.html"
-            ]
-          }
         }
       }
     }

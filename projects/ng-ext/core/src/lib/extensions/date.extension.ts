@@ -4,11 +4,10 @@ export { };
 
 declare global {
   interface Date {
-    formatToString(momentFormat: string): string | undefined;
+    formatToString: (momentFormat: string) => string | undefined;
   }
 }
 
-// tslint:disable-next-line:space-before-function-paren
 Date.prototype.formatToString = function (
   this: string,
   momentFormat: string

@@ -1,40 +1,39 @@
-import { AfterContentInit, Component, ContentChildren, QueryList } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, ContentChildren, QueryList } from '@angular/core';
 import { getTemplateContext, getTemplateRef, hasTemplateRef, templateAfterContentInit, TemplateDefinition, TemplateSelectorDirective } from '@ng-ext/core';
 import { FormArrayExt } from './form-array-ext.control';
 import { FormControlBaseComponent } from './form-control-base.component';
 import { FormControlExt } from './form-control-ext.control';
 import { FormGroupExt } from './form-group-ext.control';
 
-@Component({ template: '' })
+// eslint-disable-next-line @angular-eslint/use-component-selector
+@Component({
+  template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
 export abstract class TemplatedFormControlBaseComponent<
-  TTemplateDefinitions extends { [key: string]: TemplateDefinition<any> | null },
+  TTemplateDefinitions extends { [key in keyof TTemplateDefinitions]: TemplateDefinition | null },
   TModel,
-  TFormValues extends { [key: string]: any },
-  TFormControls extends {
-    [key in keyof TFormValues]:
-    | FormControlExt<TFormValues[key]>
-    | FormGroupExt<TFormValues[key]>
-    | FormArrayExt<TFormValues[key]>;
-  } = { [key in keyof TFormValues]: FormControlExt<TFormValues[key]> },
-  > extends FormControlBaseComponent<TModel, TFormValues, TFormControls> implements AfterContentInit {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TFormValues extends { [key in keyof TFormValues]: any },
+  TFormControls extends { [key in keyof TFormValues]: FormArrayExt<TFormValues[key]> | FormControlExt<TFormValues[key]> | FormGroupExt<TFormValues[key]>; }>
+  extends FormControlBaseComponent<TModel, TFormValues, TFormControls> implements AfterContentInit {
 
   @ContentChildren(TemplateSelectorDirective)
-  public templateSelectors?: QueryList<TemplateSelectorDirective<any>>;
+  public templateSelectors?: QueryList<TemplateSelectorDirective>;
 
-  public templates: TTemplateDefinitions
+  public getTemplateRef = getTemplateRef;
+  public getTemplateContext = getTemplateContext;
+  public hasTemplateRef = hasTemplateRef;
+  public templates: TTemplateDefinitions;
 
-  constructor() {
+  public constructor() {
     super();
     this.templates = this.initTemplates();
   }
-
-  abstract initTemplates(): TTemplateDefinitions;
 
   public ngAfterContentInit(): void {
     templateAfterContentInit(this.templateSelectors, this.templates);
   }
 
-  public getTemplateRef = getTemplateRef;
-  public getTemplateContext = getTemplateContext;
-  public hasTemplateRef = hasTemplateRef;
+  protected abstract initTemplates(): TTemplateDefinitions;
 }

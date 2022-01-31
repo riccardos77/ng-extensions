@@ -1,33 +1,32 @@
 
 export { };
 
-type KeyType<T> = Record<string | number, T>;
 declare global {
   interface Array<T> {
-    convertToObject<TValue>(
-      keyFunc: (item: T) => string | number,
+    convertToObject: <TValue>(
+      keyFunc: (item: T) => number | string,
       valueFunc: (item: T) => TValue,
-      defaultValue?: Record<string | number, TValue>
-    ): Record<string | number, TValue>;
+      defaultValue?: Record<number | string, TValue>
+    ) => Record<number | string, TValue>;
 
-    merge(
-      other: ArrayLike<T>,
+    merge: (
+      other: T[],
       keySelector: keyof T | ((item: T) => unknown),
-      action: 'keepExisting' | 'override' | 'mergeWithAssign' | ((original: T, other: T) => T)
-    ): T[];
+      action: 'keepExisting' | 'mergeWithAssign' | 'override' | ((original: T, other: T) => T)
+    ) => T[];
   }
 }
 
 Array.prototype.convertToObject = function <T, TValue>(
-  this: Array<T>,
-  keyFunc: (item: T) => string | number,
+  this: T[],
+  keyFunc: (item: T) => number | string,
   valueFunc: (item: T) => TValue,
-  defaultValue: Record<string | number, TValue> = {}
-): Record<string | number, TValue> {
-  if (this) {
-    return this.reduce(
+  defaultValue: Record<number | string, TValue> = {}
+): Record<number | string, TValue> {
+  if (this !== undefined) {
+    return this.reduce<Record<string, TValue>>(
       (acc, item) => ({ ...acc, [keyFunc(item)]: valueFunc(item) }),
-      {} as { [key: string]: TValue }
+      {}
     );
   } else {
     return defaultValue;
@@ -35,19 +34,19 @@ Array.prototype.convertToObject = function <T, TValue>(
 };
 
 Array.prototype.merge = function <T>(
-  this: Array<T>,
+  this: T[],
   otherArray: T[],
   keySelector: keyof T | ((item: T) => unknown),
-  conflctAction: 'keepExisting' | 'override' | 'mergeWithAssign' | ((original: T, other: T) => T)
+  conflctAction: 'keepExisting' | 'mergeWithAssign' | 'override' | ((original: T, other: T) => T)
 ): T[] {
-  if (this) {
-    const keySelectorPredicate = typeof keySelector === 'function' ? keySelector : ((i: T) => i[keySelector]);
+  if (this !== undefined) {
+    const keySelectorPredicate = typeof keySelector === 'function' ? keySelector : (i: T): unknown => i[keySelector];
 
     const list1 = this.map(originalItem => {
       const originalItemKey = keySelectorPredicate(originalItem);
       const otherItem = otherArray.find(o => keySelectorPredicate(o) === originalItemKey);
 
-      if (otherItem) {
+      if (otherItem !== undefined) {
         switch (conflctAction) {
           case 'keepExisting':
             return originalItem;

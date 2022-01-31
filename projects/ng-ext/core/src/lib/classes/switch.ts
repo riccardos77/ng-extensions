@@ -1,3 +1,41 @@
+class SwitchExecutor<TValue, TResult> implements SwitchCase<TValue, TResult>, SwitchDefaultCase<TResult> {
+  private foundResult: TResult | undefined;
+  private caseFound = false;
+
+  public constructor(private valueToEvaluate: TValue) { }
+
+  public case(caseEvaluator: (value: TValue) => boolean, caseResult: (value: TValue) => TResult): SwitchCase<TValue, TResult> {
+    if (!this.caseFound && caseEvaluator(this.valueToEvaluate)) {
+      this.caseFound = true;
+      this.foundResult = caseResult(this.valueToEvaluate);
+    }
+
+    return this;
+  }
+
+  public caseTyped<TValue2 extends TValue>(typeEvaluator: (value: TValue) => value is TValue2, caseEvaluator: (value: TValue2) => boolean, caseResult: (value: TValue2) => TResult): SwitchCase<TValue, TResult> {
+    if (!this.caseFound && typeEvaluator(this.valueToEvaluate) && caseEvaluator(this.valueToEvaluate)) {
+      this.caseFound = true;
+      this.foundResult = caseResult(this.valueToEvaluate);
+    }
+
+    return this;
+  }
+
+  public default(caseResult: (value: TValue) => TResult): SwitchDefaultCase<TResult> {
+    if (!this.caseFound) {
+      this.foundResult = caseResult(this.valueToEvaluate);
+    }
+
+    return this;
+  }
+
+  public execute(): TResult;
+  public execute(): TResult | undefined {
+    return this.foundResult;
+  }
+}
+
 export class Switch<TValue> {
 
   private constructor(private valueToEvaluate: TValue) {
@@ -16,54 +54,15 @@ export class Switch<TValue> {
   }
 }
 
-class SwitchExecutor<TValue, TResult> implements SwitchCase<TValue, TResult>, SwitchDefaultCase<TResult> {
-  private foundResult: TResult | undefined;
-  private caseFound = false;
-
-  constructor(private valueToEvaluate: TValue) {
-  }
-
-  case(caseEvaluator: (value: TValue) => boolean, caseResult: (value: TValue) => TResult): SwitchCase<TValue, TResult> {
-    if (!this.caseFound && caseEvaluator(this.valueToEvaluate)) {
-      this.caseFound = true;
-      this.foundResult = caseResult(this.valueToEvaluate);
-    }
-
-    return this;
-  }
-
-  caseTyped<TValue2 extends TValue>(typeEvaluator: (value: TValue) => value is TValue2, caseEvaluator: (value: TValue2) => boolean, caseResult: (value: TValue2) => TResult): SwitchCase<TValue, TResult> {
-    if (!this.caseFound && typeEvaluator(this.valueToEvaluate) && caseEvaluator(this.valueToEvaluate)) {
-      this.caseFound = true;
-      this.foundResult = caseResult(this.valueToEvaluate);
-    }
-
-    return this;
-  }
-
-  default(caseResult: (value: TValue) => TResult): SwitchDefaultCase<TResult> {
-    if (!this.caseFound) {
-      this.foundResult = caseResult(this.valueToEvaluate);
-    }
-
-    return this;
-  }
-
-  execute(): TResult
-  execute(): TResult | undefined {
-    return this.foundResult;
-  }
-}
-
 export interface SwitchCase<TValue, TResult> {
-  case(caseEvaluator: (value: TValue) => boolean, caseResult: (value: TValue) => TResult): SwitchCase<TValue, TResult>;
-  caseTyped<TValue2 extends TValue>(typeEvaluator: (value: TValue) => value is TValue2, caseEvaluator: (value: TValue2) => boolean, caseResult: (value: TValue2) => TResult): SwitchCase<TValue, TResult>;
+  case: (caseEvaluator: (value: TValue) => boolean, caseResult: (value: TValue) => TResult) => SwitchCase<TValue, TResult>;
+  caseTyped: <TValue2 extends TValue>(typeEvaluator: (value: TValue) => value is TValue2, caseEvaluator: (value: TValue2) => boolean, caseResult: (value: TValue2) => TResult) => SwitchCase<TValue, TResult>;
 
-  default(caseResult: (value: TValue) => TResult): SwitchDefaultCase<TResult>;
+  default: (caseResult: (value: TValue) => TResult) => SwitchDefaultCase<TResult>;
 
-  execute(): TResult | undefined;
+  execute: () => TResult | undefined;
 }
 
 export interface SwitchDefaultCase<TResult> {
-  execute(): TResult;
+  execute: () => TResult;
 }

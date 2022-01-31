@@ -6,71 +6,40 @@ export class FormControlExt<TValue> extends FormControl {
   private suspendedValidator: ValidatorFn | null = null;
   private suspendedAsyncValidator: AsyncValidatorFn | null = null;
 
-  public get v(): TValue {
-    return this.value;
-  }
-
-  constructor(
+  public constructor(
     formState: TValue,
-    validatorOrOpts?:
-      | ValidatorFn
-      | ValidatorFn[]
-      | AbstractControlOptions
-      | null,
+    validatorOrOpts?: AbstractControlOptions | ValidatorFn | ValidatorFn[] | null,
     asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null
   ) {
     super(formState, validatorOrOpts, asyncValidator);
   }
 
-  public override setValue(
-    value: TValue,
-    options?: ControlValueOptions
-  ): FormControlExt<TValue> {
+  public get v(): TValue {
+    return this.value as TValue;
+  }
+
+  public override setValue(value: TValue, options?: ControlValueOptions): this {
     super.setValue(value, options);
     return this;
   }
 
-  public override patchValue(
-    value: TValue,
-    options?: ControlValueOptions
-  ): FormControlExt<TValue> {
+  public override patchValue(value: TValue, options?: ControlValueOptions): this {
     super.patchValue(value, options);
     return this;
   }
 
-  public enableDisable(
-    enable: boolean,
-    resetOnDisable = true,
-    resetValue?: TValue,
-    options?: ControlStateOptions
-  ): FormControlExt<TValue> {
+  public enableDisable(enable: boolean, resetOnDisable = true, resetValue?: TValue, options?: ControlStateOptions): this {
     enableDisableControl(this, enable, resetOnDisable, resetValue, options);
     return this;
   }
 
-  public suspendResumeValidators(
-    suspend: boolean,
-    enforceOnResume = true
-  ): FormControlExt<TValue> {
-    this.suspendedValidator = suspendResumeValidators(
-      this,
-      this.suspendedValidator,
-      suspend,
-      enforceOnResume
-    );
+  public suspendResumeValidators(suspend: boolean, enforceOnResume = true): this {
+    this.suspendedValidator = suspendResumeValidators(this, this.suspendedValidator, suspend, enforceOnResume);
     return this;
   }
 
-  public suspendResumeAsyncValidators(
-    suspend: boolean,
-    enforceOnResume = true
-  ): FormControlExt<TValue> {
-    this.suspendedAsyncValidator = suspendResumeAsyncValidators(
-      this,
-      this.suspendedAsyncValidator,
-      suspend,
-      enforceOnResume
-    );
+  public suspendResumeAsyncValidators(suspend: boolean, enforceOnResume = true): this {
+    this.suspendedAsyncValidator = suspendResumeAsyncValidators(this, this.suspendedAsyncValidator, suspend, enforceOnResume);
     return this;
   }
 }

@@ -1,30 +1,34 @@
-import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { NumberFormatStyle } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Validators } from '@angular/forms';
 import { FormArrayExt, FormControlExt, FormGroupExt } from '@ng-ext/forms';
+import { SubFormModel } from './components/sub-form/sub-form.component';
 
 @Component({
   selector: 'app-test-forms',
   templateUrl: './test-forms.component.html',
   styleUrls: ['./test-forms.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestFormsComponent {
   public form: FormGroupExt<TestFormValues, TestFormControls>;
   public selectSelectedValue?: string;
 
-  constructor(fb: FormBuilder) {
+  public constructor() {
     this.form = new FormGroupExt<TestFormValues, TestFormControls>({
       text1: new FormControlExt(''),
-      num1: new FormControlExt(0, [Validators.required, Validators.max(2)]),
+      num1: new FormControlExt(0, [Validators.required, Validators.max(2000)]),
       date1: new FormControlExt(undefined, [Validators.required]),
       // obj1: new FormControlExt({ innerNum: 1, innerString: '' })
       obj1: new FormGroupExt({
         innerNum: new FormControlExt(1),
-        innerString: new FormControlExt(''),
+        innerString: new FormControlExt('')
       }),
       arrText1: new FormArrayExt([
         new FormControlExt(''),
-        new FormControlExt(''),
+        new FormControlExt('')
       ]),
+      subObj: new FormControlExt<SubFormModel>({ s: '' })
       // arrObj1: new FormArrayExt(
       //   [
       //     new FormGroupExt({
@@ -38,8 +42,9 @@ export class TestFormsComponent {
 
   public log(): void {
     console.log(this.form.v);
-    console.log('1'.convertToNumber());
-    console.log('ciao'.convertToNumber());
+
+    const n = 1.23456;
+    console.log(n.formatToString(NumberFormatStyle.Currency, 'it', '€', 'eur'));
 
     let s: string | undefined = '1';
 
@@ -47,6 +52,10 @@ export class TestFormsComponent {
       s = undefined;
     }
     console.log(s?.convertToNumber());
+  }
+
+  public logSubObj(): void {
+    console.log(this.form.v.subObj);
   }
 
   public setDate(): void {
@@ -69,6 +78,7 @@ interface TestFormValues {
   date1: Date | undefined;
   obj1: InnerObjectValues;
   arrText1: string[];
+  subObj: SubFormModel;
   // arrObj1: InnerObjectValues[];
 }
 
@@ -78,5 +88,6 @@ interface TestFormControls {
   date1: FormControlExt<Date | undefined>;
   obj1: FormGroupExt<InnerObjectValues>;
   arrText1: FormArrayExt<string[]>;
+  subObj: FormControlExt<SubFormModel>;
   // arrObj1: FormArrayExt<InnerObjectValues[], InnerObjectValues, FormGroupExt<InnerObjectValues>>;
 }

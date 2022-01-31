@@ -2,7 +2,8 @@
 <div [formGroup]="form">
   text1: <input type="text" [formControl]="form.c.text1" />
   <br />
-  num1: <input type="text" [formControl]="form.c.num1" />
+  <!-- num1: <input type="text" [formControl]="form.c.num1" [numberConverter]="'1.2-2'" /> -->
+  num2: <input type="number" [formControl]="form.c.num1" />
   <br />
   date1:
   <input type="text" [formControl]="form.c.date1" [dateConverter]="'DD/MM/YYYY HH:mm'" />
@@ -17,6 +18,8 @@
     obj1.innerNum:
     <input type="number" [formControl]="form.c.obj1.c.innerNum" />
   </div>
+
+  <app-sub-form [formControl]="form.c.subObj" (ngModelChange)="logSubObj()"></app-sub-form>
 
   <div *ngFor="let item of form.c.arrText1.c; let i = index">
     Array {{ i }} <input type="string" [formControl]="form.c.arrText1.at(i)" />

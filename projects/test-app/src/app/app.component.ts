@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ValidatorsExt } from '@ng-ext/forms';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +9,5 @@ export class AppComponent {
   public title = 'test-app';
 
   constructor() {
-    const a = ValidatorsExt.fiscalCodePattern();
   }
 }

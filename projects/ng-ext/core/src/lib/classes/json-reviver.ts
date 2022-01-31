@@ -3,14 +3,16 @@ import moment from 'moment';
 export class JsonReviverBuilder {
   private reviverPipeline: JsonReviverFunction[] = [];
 
-  public addDateParser(): JsonReviverBuilder {
+  public addDateParser(includeDateOnly: boolean = false): this {
     const dateParserFn: JsonReviverFunction = (k, v) => {
       if (typeof v === 'string') {
-        let m = moment(v, 'YYYY-MM-DDTHH:mm:ssZ', true);
-        if (m.isValid()) {
-          return m.toDate();
-        } else {
-          m = moment(v, 'YYYY-MM-DDTHH:mm:ss.SSSSZ', true);
+        const formats = ['YYYY-MM-DDTHH:mm:ssZ', 'YYYY-MM-DDTHH:mm:ss.SSSSZ'];
+        if (includeDateOnly) {
+          formats.push('YYYY-MM-DD');
+        }
+
+        for (const format of formats) {
+          const m = moment(v, format, true);
           if (m.isValid()) {
             return m.toDate();
           }

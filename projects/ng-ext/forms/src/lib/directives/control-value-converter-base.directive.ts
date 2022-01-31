@@ -1,22 +1,36 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
 
 @Directive()
-export abstract class ControlValueConverterBaseDirective<TControlValue, TModelValue> implements ControlValueAccessor {
+export abstract class ControlValueConverterBaseDirective<TControlValue, TModelValue> implements ControlValueAccessor, Validator {
   private onChangeFn?: (_: any) => void;
   private onTouchedFn?: () => void;
 
-  constructor(private renderer: Renderer2, private elementRef: ElementRef) { }
+  public constructor(private renderer: Renderer2, private elementRef: ElementRef) { }
 
-  protected abstract controlToModel(control: TControlValue): TModelValue;
-  protected abstract modelToControl(value: TModelValue): TControlValue;
+  @HostListener('input', ['$event.target'])
+  public onInput(target: any): void {
+    if (this.validateValue(target.value) === null) {
+      this.onChangeFn?.(this.controlToModel(target.value));
+    }
+  }
+
+  @HostListener('blur')
+  public onBlur(): void {
+    this.onTouchedFn?.();
+  }
 
   public writeValue(obj: any): void {
     this.renderer.setProperty(
       this.elementRef.nativeElement,
       'value',
-      this.modelToControl(obj)
+      this.modelToControl(obj as TModelValue)
     );
   }
 
@@ -36,13 +50,16 @@ export abstract class ControlValueConverterBaseDirective<TControlValue, TModelVa
     );
   }
 
-  @HostListener('input', ['$event.target'])
-  public onInput(target: any): void {
-    this.onChangeFn?.(this.controlToModel(target.value));
+  public validate(control: AbstractControl): ValidationErrors | null {
+    return this.validateValue(control.value);
   }
 
-  @HostListener('blur')
-  public onBlur(): void {
-    this.onTouchedFn?.();
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected validateValue(value: TControlValue): ValidationErrors | null {
+    return null;
   }
+  protected abstract controlToModel(control: TControlValue): TModelValue;
+  protected abstract modelToControl(value: TModelValue): TControlValue;
+
 }

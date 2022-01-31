@@ -1,35 +1,36 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
+import { wrapIntoObservable } from '@ng-ext/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { FormArrayExt } from './form-array-ext.control';
 import { FormControlExt } from './form-control-ext.control';
 import { FormGroupExt } from './form-group-ext.control';
 import { enableDisableControl } from './helpers/control.helpers';
-import { InitFormOn } from './models/controls.model';
+import { FormControlBaseComponentConfig } from './models/controls.model';
 
-@Component({ template: '' })
-export abstract class FormControlBaseComponent<
-  TModel,
-  TFormValues extends { [key: string]: any },
-  TFormControls extends {
-    [key in keyof TFormValues]:
-    | FormControlExt<TFormValues[key]>
-    | FormGroupExt<TFormValues[key]>
-    | FormArrayExt<TFormValues[key]>;
-  } = { [key in keyof TFormValues]: FormControlExt<TFormValues[key]> }
-  > implements OnInit, OnDestroy, ControlValueAccessor, Validator {
-  private onChangeFn?: (_: any) => void;
+// eslint-disable-next-line @angular-eslint/use-component-selector
+@Component({
+  template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export abstract class FormControlBaseComponent<TModel, TFormValues extends { [key in keyof TFormValues]: any }, TFormControls extends { [key in keyof TFormValues]: FormArrayExt<TFormValues[key]> | FormControlExt<TFormValues[key]> | FormGroupExt<TFormValues[key]>; }> implements OnInit, OnDestroy, ControlValueAccessor, Validator {
+  public formInitialized$ = new BehaviorSubject<boolean>(false);
+
+  private configuration: FormControlBaseComponentConfig = { initFormOn: 'ctor', notifyChangesMode: 'automatic' };
+  private onChangeFn?: (_: unknown) => void;
   private onTouchedFn?: () => void;
   private onValidatorChangeFn?: () => void;
   private valueChangedSubscription?: Subscription;
   private statusChangedSubscription?: Subscription;
-  private initFormOn: InitFormOn = 'setupForm';
-  private initFormFn?: () => FormGroupExt<TFormValues, TFormControls> | TFormControls;
-  private modelToFormFn?: (model: TModel) => Observable<TFormValues>;
-  private formToModelFn?: (values: TFormValues) => Observable<TModel>;
-  private statusChanged = false;
   private _form?: FormGroupExt<TFormValues, TFormControls>;
+
+  public constructor() {
+    this.configure(this.configuration);
+    if (this.configuration.initFormOn === 'ctor') {
+      this.doInitForm();
+    }
+  }
 
   public get form(): FormGroupExt<TFormValues, TFormControls> {
     if (this._form) {
@@ -42,12 +43,9 @@ export abstract class FormControlBaseComponent<
   public get formInitialized(): boolean {
     return this.formInitialized$.value;
   }
-  public formInitialized$ = new BehaviorSubject<boolean>(false);
-
-  constructor() { }
 
   public ngOnInit(): void {
-    if (this.initFormOn === 'ngOnInit') {
+    if (this.configuration.initFormOn === 'ngOnInit') {
       this.doInitForm();
     }
   }
@@ -55,125 +53,101 @@ export abstract class FormControlBaseComponent<
   public ngOnDestroy(): void {
     this.valueChangedSubscription?.unsubscribe();
     this.statusChangedSubscription?.unsubscribe();
-    this.formInitialized$?.unsubscribe();
+    this.formInitialized$.unsubscribe();
   }
 
-  public writeValue(obj: any): void {
-    if (this.modelToFormFn) {
-      this.modelToFormFn(obj).subscribe((model) => {
-        if (model && this.form) {
-          this.form.patchValue(model);
-          this.form.markAsPristine();
-          this.form.markAsUntouched();
+  public writeValue(obj: unknown): void {
+    const value = obj as TModel;
+    const modelToForm$ = wrapIntoObservable(this.modelToForm(value));
+    modelToForm$.subscribe(model => {
+      this.form.patchValue(model);
+      this.form.markAsPristine();
+      this.form.markAsUntouched();
 
-          if (!this.formInitialized && !this.formInitialized$.isStopped) {
-            this.formInitialized$.next(true);
-          }
-        }
-      });
-    } else {
-      throw new Error('Control not initialized');
-    }
+      if (!this.formInitialized && !this.formInitialized$.isStopped) {
+        this.formInitialized$.next(true);
+      }
+    });
   }
 
-  public registerOnChange(fn: any): void {
+  public registerOnChange(fn: (_: unknown) => void): void {
     this.onChangeFn = fn;
   }
 
-  public registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouchedFn = fn;
   }
 
   public setDisabledState?(isDisabled: boolean): void {
     if (isDisabled) {
-      this.form?.disable();
+      this.form.disable();
     } else {
-      this.form?.enable();
+      this.form.enable();
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public validate(control: AbstractControl): ValidationErrors | null {
-    return this.form?.invalid ? { hasErrors: true } : null;
+    return this.form.invalid ? { hasErrors: true } : null;
   }
 
   public registerOnValidatorChange?(fn: () => void): void {
     this.onValidatorChangeFn = fn;
   }
 
-  protected setupForm(
-    initFormFn: () => FormGroupExt<TFormValues, TFormControls> | TFormControls,
-    modelToFormFn: (model: TModel) => Observable<TFormValues>,
-    formToModelFn: (values: TFormValues) => Observable<TModel>,
-    initFormOn: InitFormOn = 'setupForm'
-  ): void {
-    if (initFormFn) {
-      this.initFormOn = initFormOn;
-      this.initFormFn = initFormFn;
-      this.modelToFormFn = modelToFormFn;
-      this.formToModelFn = formToModelFn;
-
-      if (initFormOn === 'setupForm') {
-        this.doInitForm();
-        this.statusChanged = true;
-      }
-    } else {
-      throw new Error('Missing required functions');
-    }
-  }
-
-  protected enableDisableControl(
-    control: AbstractControl,
-    enable: boolean,
-    resetOnDisable = true,
-    resetValue?: any
-  ): void {
+  public enableDisableControl(control: AbstractControl, enable: boolean, resetOnDisable = true, resetValue?: unknown): void {
     enableDisableControl(control, enable, resetOnDisable, resetValue);
   }
 
-  protected ensureStatusUpdated(): void {
-    if (this.onValidatorChangeFn && this.statusChanged) {
-      this.onValidatorChangeFn();
-      this.statusChanged = false;
-    }
+  public notifyChanges(): void {
+    this.formUpdated();
+    this.statusUpdated();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+  protected configure(config: FormControlBaseComponentConfig): void {
   }
 
   private doInitForm(): void {
-    if (this.initFormFn) {
-      const initFormResult = this.initFormFn();
+    const initFormResult = this.initForm();
 
-      if (initFormResult instanceof FormGroupExt) {
-        this._form = initFormResult;
-      } else {
-        this._form = new FormGroupExt<TFormValues, TFormControls>(initFormResult);
-      }
-
-      this.valueChangedSubscription = this.form.valueChanges.subscribe(
-        (values) => this.formUpdated()
-      );
-      this.statusChangedSubscription = this.form.statusChanges.subscribe(
-        (values) => {
-          this.statusChanged = true;
-          this.ensureStatusUpdated();
-        }
-      );
+    if (initFormResult instanceof FormGroupExt) {
+      this._form = initFormResult;
     } else {
-      throw new Error('Control not initialized');
+      this._form = new FormGroupExt<TFormValues, TFormControls>(initFormResult);
+    }
+
+    if (this.configuration.notifyChangesMode === 'automatic') {
+      this.valueChangedSubscription = this.form.valueChanges.subscribe(() => {
+        this.formUpdated();
+      });
+
+      this.statusChangedSubscription = this.form.statusChanges.subscribe(() => {
+        this.statusUpdated();
+      });
     }
   }
 
   private formUpdated(): void {
-    if (this.formToModelFn && this.form) {
-      this.formToModelFn(this.form.v).subscribe((result) => {
-        if (this.onChangeFn) {
-          this.onChangeFn(result);
-        }
+    const formToModel$ = wrapIntoObservable(this.formToModel(this.form.v));
+    formToModel$.subscribe(result => {
+      if (this.onChangeFn) {
+        this.onChangeFn(result);
+      }
 
-        if (this.onTouchedFn) {
-          this.onTouchedFn();
-        }
-      });
-    } else {
-      throw new Error('Control not initialized');
+      if (this.onTouchedFn) {
+        this.onTouchedFn();
+      }
+    });
+  }
+
+  private statusUpdated(): void {
+    if (this.onValidatorChangeFn) {
+      this.onValidatorChangeFn();
     }
   }
+
+  protected abstract initForm(): FormGroupExt<TFormValues, TFormControls> | TFormControls;
+  protected abstract modelToForm(model: TModel): Observable<TFormValues> | Promise<TFormValues> | TFormValues;
+  protected abstract formToModel(values: TFormValues): Observable<TModel> | Promise<TModel> | TModel;
 }

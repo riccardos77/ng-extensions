@@ -1,9 +1,9 @@
 import { AbstractControl, ValidatorFn, Validators } from '@angular/forms';
 import { enableDisableControl } from '../controls/helpers/control.helpers';
 
-export type FormSectionState = 'enabledRequired' | 'enabledOptional' | 'readOnlyValueAllowed' | 'readOnlyValueForbidden' | 'hiddenValueAllowed' | 'hiddenValueForbidden';
+export type FormSectionState = 'enabledOptional' | 'enabledRequired' | 'hiddenValueAllowed' | 'hiddenValueForbidden' | 'readOnlyValueAllowed' | 'readOnlyValueForbidden';
 
-export const FormSectionStates = {
+export const formSectionStates = {
   enabledRequired: 'enabledRequired' as FormSectionState,
   enabledOptional: 'enabledOptional' as FormSectionState,
   readOnlyValueAllowed: 'readOnlyValueAllowed' as FormSectionState,
@@ -12,24 +12,25 @@ export const FormSectionStates = {
   hiddenValueForbidden: 'hiddenValueForbidden' as FormSectionState
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export function manageSectionControls(controls: AbstractControl[], sectionState: FormSectionState, additionalValidators: ValidatorFn[] = [], resetValue?: any): void {
   controls.forEach(c => {
     switch (sectionState) {
-      case FormSectionStates.enabledRequired:
+      case formSectionStates.enabledRequired:
         enableDisableControl(c, true, false);
         c.setValidators([...additionalValidators, Validators.required]);
         break;
-      case FormSectionStates.enabledOptional:
+      case formSectionStates.enabledOptional:
         enableDisableControl(c, true, false);
         c.setValidators(additionalValidators);
         break;
-      case FormSectionStates.hiddenValueAllowed:
-      case FormSectionStates.readOnlyValueAllowed:
+      case formSectionStates.hiddenValueAllowed:
+      case formSectionStates.readOnlyValueAllowed:
         enableDisableControl(c, false, false);
         c.clearValidators();
         break;
-      case FormSectionStates.hiddenValueForbidden:
-      case FormSectionStates.readOnlyValueForbidden:
+      case formSectionStates.hiddenValueForbidden:
+      case formSectionStates.readOnlyValueForbidden:
         enableDisableControl(c, false, true, resetValue);
         c.clearValidators();
         break;
@@ -40,13 +41,13 @@ export function manageSectionControls(controls: AbstractControl[], sectionState:
 }
 
 export function isSectionEnabled(section: FormSectionState): boolean {
-  return section === FormSectionStates.enabledRequired || section === FormSectionStates.enabledOptional;
+  return section === formSectionStates.enabledRequired || section === formSectionStates.enabledOptional;
 }
 
 export function isSectionVisible(section: FormSectionState): boolean {
-  return section !== FormSectionStates.hiddenValueAllowed && section !== FormSectionStates.hiddenValueForbidden;
+  return section !== formSectionStates.hiddenValueAllowed && section !== formSectionStates.hiddenValueForbidden;
 }
 
 export function isSectionValueAllowed(section: FormSectionState): boolean {
-  return section === FormSectionStates.enabledRequired || section === FormSectionStates.enabledOptional || section === FormSectionStates.hiddenValueAllowed;
+  return section === formSectionStates.enabledRequired || section === formSectionStates.enabledOptional || section === formSectionStates.hiddenValueAllowed;
 }

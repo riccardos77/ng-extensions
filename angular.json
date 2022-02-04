@@ -8,6 +8,16 @@
       "root": "projects/ng-ext/core",
       "sourceRoot": "projects/ng-ext/core/src",
       "prefix": "ngExt",
+      "schematics": {
+        "@schematics/angular:component": {
+          "changeDetection": "OnPush",
+          "prefix": "ng-ext",
+          "style": "scss"
+        },
+        "@schematics/angular:directive": {
+          "prefix": "ngExt"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -40,6 +50,16 @@
       "root": "projects/ng-ext/forms",
       "sourceRoot": "projects/ng-ext/forms/src",
       "prefix": "ngExt",
+      "schematics": {
+        "@schematics/angular:component": {
+          "changeDetection": "OnPush",
+          "prefix": "ng-ext",
+          "style": "scss"
+        },
+        "@schematics/angular:directive": {
+          "prefix": "ngExt"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -72,6 +92,16 @@
       "root": "projects/ng-ext/router",
       "sourceRoot": "projects/ng-ext/router/src",
       "prefix": "ngExt",
+      "schematics": {
+        "@schematics/angular:component": {
+          "changeDetection": "OnPush",
+          "prefix": "ng-ext",
+          "style": "scss"
+        },
+        "@schematics/angular:directive": {
+          "prefix": "ngExt"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -103,10 +133,30 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "changeDetection": "OnPush",
+          "style": "scss",
+          "skipTests": true
         },
-        "@schematics/angular:application": {
-          "strict": true
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "skipTests": true
+        },
+        "@schematics/angular:interceptor": {
+          "skipTests": true
+        },
+        "@schematics/angular:module": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
         }
       },
       "root": "projects/test-app",

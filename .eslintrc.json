@@ -16,7 +16,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "app",
+            "prefix": "ngExt",
             "style": "camelCase"
           }
         ],
@@ -24,7 +24,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "app",
+            "prefix": "ng-ext",
             "style": "kebab-case"
           }
         ]

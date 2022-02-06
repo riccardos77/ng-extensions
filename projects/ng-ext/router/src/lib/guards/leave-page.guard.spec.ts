@@ -1,3 +1,7 @@
+/* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
+/* eslint-disable @angular-eslint/use-component-selector */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
@@ -8,28 +12,54 @@ import '../extensions/router.extension';
 import { ILeavePage, LeavePageGuard } from '../guards/leave-page.guard';
 import { NgExtRouterModule } from '../router.module';
 
-describe('leave-page.guard', () => {
-  let location: Location;
-  let router: Router;
-  let fixture: TestAppComponent;
+@Component({ template: '' })
+class TestHomeComponent {}
 
-  beforeEach(() => {
+@Component({ template: '' })
+class TestLeavePageComponent implements ILeavePage {
+  public canLeavePageValue = false;
+
+  public canUnloadWindow(): boolean {
+    return this.canLeavePageValue;
+  }
+
+  public canDeactivateRoute(
+    currentRoute: ActivatedRouteSnapshot,
+    currentState: RouterStateSnapshot,
+    nextState?: RouterStateSnapshot
+  ): Observable<UrlTree | boolean> | Promise<UrlTree | boolean> | UrlTree | boolean {
+    return this.canLeavePageValue;
+  }
+}
+
+@Component({ template: `<router-outlet></router-outlet>` })
+class TestAppComponent {}
+
+const testRoutes: Routes = [
+  { path: 'home', component: TestHomeComponent },
+  { path: 'leave-page-01', component: TestLeavePageComponent, canDeactivate: [LeavePageGuard] },
+];
+
+describe('leave-page.guard', () => {
+  function setupTest(): { router: Router; location: Location; fixture: TestAppComponent } {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes(testRoutes),
-        NgExtRouterModule.forRoot()
-      ],
-      declarations: [TestAppComponent, TestHomeComponent, TestLeavePageComponent]
+      imports: [RouterTestingModule.withRoutes(testRoutes), NgExtRouterModule.forRoot()],
+      declarations: [TestAppComponent, TestHomeComponent, TestLeavePageComponent],
     });
 
-    router = TestBed.inject(Router);
-    location = TestBed.inject(Location);
-
-    fixture = TestBed.createComponent(TestAppComponent);
+    const router = TestBed.inject(Router);
     router.initialNavigation();
-  });
+
+    return {
+      router,
+      location: TestBed.inject(Location),
+      fixture: TestBed.createComponent(TestAppComponent),
+    };
+  }
 
   it('navigate in and out LeavePageComponent with guard disabled', fakeAsync(() => {
+    const { router, location } = setupTest();
+
     router.navigate(['/leave-page-01']);
     tick();
     expect(location.path()).toBe('/leave-page-01');
@@ -46,6 +76,8 @@ describe('leave-page.guard', () => {
   }));
 
   it('navigate in and out LeavePageComponent with guard enabled', fakeAsync(() => {
+    const { router, location } = setupTest();
+
     router.navigate(['/leave-page-01']);
     tick();
     expect(location.path()).toBe('/leave-page-01');
@@ -61,27 +93,3 @@ describe('leave-page.guard', () => {
     expect(location.path()).toBe('/leave-page-01');
   }));
 });
-
-@Component({ template: '' })
-class TestHomeComponent { }
-
-@Component({ template: '' })
-class TestLeavePageComponent implements ILeavePage {
-  public canLeavePageValue = false;
-
-  public canUnloadWindow(): boolean {
-    return this.canLeavePageValue;
-  }
-
-  public canDeactivateRoute(currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.canLeavePageValue;
-  }
-}
-
-@Component({ template: `<router-outlet></router-outlet>` })
-class TestAppComponent { }
-
-const testRoutes: Routes = [
-  { path: 'home', component: TestHomeComponent },
-  { path: 'leave-page-01', component: TestLeavePageComponent, canDeactivate: [LeavePageGuard] },
-];

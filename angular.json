@@ -37,10 +37,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "projects/ng-ext/core/**/*.ts",
-              "projects/ng-ext/core/**/*.html"
-            ]
+            "lintFilePatterns": ["projects/ng-ext/core/**/*.ts", "projects/ng-ext/core/**/*.html"]
           }
         }
       }
@@ -79,10 +76,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "projects/ng-ext/forms/**/*.ts",
-              "projects/ng-ext/forms/**/*.html"
-            ]
+            "lintFilePatterns": ["projects/ng-ext/forms/**/*.ts", "projects/ng-ext/forms/**/*.html"]
           }
         }
       }
@@ -121,10 +115,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "projects/ng-ext/router/**/*.ts",
-              "projects/ng-ext/router/**/*.html"
-            ]
+            "lintFilePatterns": ["projects/ng-ext/router/**/*.ts", "projects/ng-ext/router/**/*.html"]
           }
         }
       }
@@ -172,13 +163,8 @@
             "polyfills": "projects/test-app/src/polyfills.ts",
             "tsConfig": "projects/test-app/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "projects/test-app/src/favicon.ico",
-              "projects/test-app/src/assets"
-            ],
-            "styles": [
-              "projects/test-app/src/styles.scss"
-            ],
+            "assets": ["projects/test-app/src/favicon.ico", "projects/test-app/src/assets"],
+            "styles": ["projects/test-app/src/styles.scss"],
             "scripts": []
           },
           "configurations": {

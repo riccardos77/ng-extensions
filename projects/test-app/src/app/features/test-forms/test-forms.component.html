@@ -12,7 +12,7 @@
     <option value="a">value a</option>
     <option value="b">value b</option>
   </select>
-  {{selectSelectedValue}}
+  {{ selectSelectedValue }}
 
   <div [formGroup]="form.c.obj1">
     obj1.innerNum:
@@ -21,13 +21,10 @@
 
   <app-sub-form [formControl]="form.c.subObj" (ngModelChange)="logSubObj()"></app-sub-form>
 
-  <div *ngFor="let item of form.c.arrText1.c; let i = index">
-    Array {{ i }} <input type="string" [formControl]="form.c.arrText1.at(i)" />
-  </div>
+  <!-- eslint-disable-next-line @angular-eslint/template/use-track-by-function -->
+  <div *ngFor="let ctrl of form.c.arrText1.c; let i = index">Array {{ i }} <input type="string" [formControl]="ctrl" /></div>
 </div>
 
 <button (click)="log()">log</button>
-<button (click)="form.c.num1.setValue(form.c.obj1.c.innerNum.value)">
-  setvalue
-</button>
+<button (click)="form.c.num1.setValue(form.c.obj1.c.innerNum.value)">setvalue</button>
 <button (click)="setDate()">setDate</button>

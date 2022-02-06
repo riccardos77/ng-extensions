@@ -1,6 +1,6 @@
 <ng-component [formGroup]="form">
   <p>sub form -- start</p>
-  s: <input type="text" [formControl]="form.c.s"><br>
-  n1: <input type="text" [formControl]="form.c.n1" (ngModelChange)="multipleChanges()">
+  s: <input type="text" [formControl]="form.c.s" /><br />
+  n1: <input type="text" [formControl]="form.c.n1" (ngModelChange)="multipleChanges()" />
   <p>sub form -- end</p>
 </ng-component>

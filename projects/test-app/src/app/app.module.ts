@@ -13,22 +13,16 @@ import { TestRouterModule } from './features/test-router/test-router.module';
 registerLocaleData(localeIt, 'it');
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes, { enableTracing: false }),
     HomeModule,
-    TestRouterModule,
     TestFormsModule,
+    TestRouterModule,
     NgExtRouterModule.forRoot(),
   ],
-  providers: [
-    { provide: LOCALE_ID, useValue: 'it' }
-  ],
-  bootstrap: [
-    AppComponent
-  ],
+  providers: [{ provide: LOCALE_ID, useValue: 'it' }],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

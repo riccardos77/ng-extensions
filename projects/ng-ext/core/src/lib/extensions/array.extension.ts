@@ -1,5 +1,4 @@
-
-export { };
+export {};
 
 declare global {
   interface Array<T> {
@@ -24,10 +23,7 @@ Array.prototype.convertToObject = function <T, TValue>(
   defaultValue: Record<number | string, TValue> = {}
 ): Record<number | string, TValue> {
   if (this !== undefined) {
-    return this.reduce<Record<string, TValue>>(
-      (acc, item) => ({ ...acc, [keyFunc(item)]: valueFunc(item) }),
-      {}
-    );
+    return this.reduce<Record<string, TValue>>((acc, item) => ({ ...acc, [keyFunc(item)]: valueFunc(item) }), {});
   } else {
     return defaultValue;
   }

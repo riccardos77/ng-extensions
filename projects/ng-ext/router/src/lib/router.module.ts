@@ -4,10 +4,8 @@ import { LeavePageGuard } from './guards/leave-page.guard';
 
 @NgModule({
   declarations: [],
-  imports: [
-    RouterModule
-  ],
-  exports: []
+  imports: [RouterModule],
+  exports: [],
 })
 export class NgExtRouterModule {
   public static forRoot(): ModuleWithProviders<NgExtRouterModule> {
@@ -16,16 +14,16 @@ export class NgExtRouterModule {
       providers: [
         {
           provide: APP_INITIALIZER,
-          // LeavePageGuard is injected to force Guard costructor execution
+          // LeavePageGuard is injected to force Guard constructor execution
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           useFactory: (leavePage: LeavePageGuard) => {
             return async () => Promise.resolve();
           },
           deps: [LeavePageGuard],
-          multi: true
+          multi: true,
         },
-        LeavePageGuard
-      ]
+        LeavePageGuard,
+      ],
     };
   }
 }

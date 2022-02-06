@@ -2,7 +2,7 @@
 
 import moment from 'moment';
 
-export { };
+export {};
 
 declare global {
   interface String {
@@ -12,10 +12,7 @@ declare global {
   }
 }
 
-String.prototype.convertToDate = function (
-  this: string,
-  momentFormat: string
-): Date | undefined {
+String.prototype.convertToDate = function (this: string, momentFormat: string): Date | undefined {
   if (this) {
     return moment(this, momentFormat).toDate();
   } else {
@@ -49,6 +46,4 @@ String.prototype.convertToNumber = function (
   } else {
     return undefined;
   }
-
-
 };

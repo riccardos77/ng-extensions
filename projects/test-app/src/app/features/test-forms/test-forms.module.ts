@@ -7,16 +7,7 @@ import { SubFormComponent } from './components/sub-form/sub-form.component';
 import { TestFormsComponent } from './test-forms.component';
 
 @NgModule({
-  declarations: [
-    SubFormComponent,
-    TestFormsComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    NgExtFormsModule,
-    NgExtCoreModule.forRoot(),
-    ReactiveFormsModule
-  ]
+  declarations: [SubFormComponent, TestFormsComponent],
+  imports: [CommonModule, FormsModule, NgExtFormsModule, NgExtCoreModule.forRoot(), ReactiveFormsModule],
 })
-export class TestFormsModule { }
+export class TestFormsModule {}

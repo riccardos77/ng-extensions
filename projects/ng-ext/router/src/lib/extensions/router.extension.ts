@@ -1,6 +1,6 @@
 import { ChildrenOutletContexts, Router } from '@angular/router';
 
-export { };
+export {};
 
 declare module '@angular/router' {
   interface Router {
@@ -8,9 +8,7 @@ declare module '@angular/router' {
   }
 }
 
-Router.prototype.getActiveComponent = function <T>(
-  this: Router
-): T | undefined {
+Router.prototype.getActiveComponent = function <T>(this: Router): T | undefined {
   if (this !== undefined) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
     const rootContexts = (this as any).rootContexts as ChildrenOutletContexts;

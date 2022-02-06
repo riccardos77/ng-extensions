@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { UrlTree } from '@angular/router';
 import { ILeavePage } from '@ng-ext/router';
 import { Observable } from 'rxjs';
 
@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
   selector: 'app-test-router',
   templateUrl: './test-router.component.html',
   styleUrls: ['./test-router.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TestRouterComponent implements ILeavePage {
   public canLeavePageValue = true;
@@ -15,12 +16,10 @@ export class TestRouterComponent implements ILeavePage {
     return this.canLeavePageValue;
   }
 
-  public canDeactivateRoute(currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+  public canDeactivateRoute(): Observable<UrlTree | boolean> | Promise<UrlTree | boolean> | UrlTree | boolean {
     return new Observable(sub => {
-      setTimeout(() => {
-        sub.next(this.canLeavePageValue);
-        sub.complete();
-      }, 2000);
+      sub.next(this.canLeavePageValue ? true : confirm('exit?'));
+      sub.complete();
     });
   }
 }

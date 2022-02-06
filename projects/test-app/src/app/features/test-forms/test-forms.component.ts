@@ -8,7 +8,7 @@ import { SubFormModel } from './components/sub-form/sub-form.component';
   selector: 'app-test-forms',
   templateUrl: './test-forms.component.html',
   styleUrls: ['./test-forms.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TestFormsComponent {
   public form: FormGroupExt<TestFormValues, TestFormControls>;
@@ -22,13 +22,10 @@ export class TestFormsComponent {
       // obj1: new FormControlExt({ innerNum: 1, innerString: '' })
       obj1: new FormGroupExt({
         innerNum: new FormControlExt(1),
-        innerString: new FormControlExt('')
+        innerString: new FormControlExt(''),
       }),
-      arrText1: new FormArrayExt([
-        new FormControlExt(''),
-        new FormControlExt('')
-      ]),
-      subObj: new FormControlExt<SubFormModel>({ s: '' })
+      arrText1: new FormArrayExt([new FormControlExt(''), new FormControlExt('')]),
+      subObj: new FormControlExt<SubFormModel>({ s: '' }),
       // arrObj1: new FormArrayExt(
       //   [
       //     new FormGroupExt({
@@ -62,8 +59,8 @@ export class TestFormsComponent {
     this.form.c.date1.setValue(new Date());
   }
 
-  public selectChanged(event: any): void {
-    this.selectSelectedValue = event.target.value;
+  public selectChanged(event: Event): void {
+    this.selectSelectedValue = (event.target as HTMLSelectElement).value;
   }
 }
 

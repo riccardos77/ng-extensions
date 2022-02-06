@@ -11,10 +11,20 @@ import { FormControlBaseComponentConfig } from './models/controls.model';
 // eslint-disable-next-line @angular-eslint/use-component-selector
 @Component({
   template: '',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export abstract class FormControlBaseComponent<TModel, TFormValues extends { [key in keyof TFormValues]: any }, TFormControls extends { [key in keyof TFormValues]: FormArrayExt<TFormValues[key]> | FormControlExt<TFormValues[key]> | FormGroupExt<TFormValues[key]>; }> implements OnInit, OnDestroy, ControlValueAccessor, Validator {
+export abstract class FormControlBaseComponent<
+  TModel,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TFormValues extends { [key in keyof TFormValues]: any },
+  TFormControls extends {
+    [key in keyof TFormValues]:
+      | FormArrayExt<TFormValues[key]>
+      | FormControlExt<TFormValues[key]>
+      | FormGroupExt<TFormValues[key]>;
+  }
+> implements OnInit, OnDestroy, ControlValueAccessor, Validator
+{
   public formInitialized$ = new BehaviorSubject<boolean>(false);
 
   private configuration: FormControlBaseComponentConfig = { initFormOn: 'ctor', notifyChangesMode: 'automatic' };
@@ -105,8 +115,7 @@ export abstract class FormControlBaseComponent<TModel, TFormValues extends { [ke
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-  protected configure(config: FormControlBaseComponentConfig): void {
-  }
+  protected configure(config: FormControlBaseComponentConfig): void {}
 
   private doInitForm(): void {
     const initFormResult = this.initForm();

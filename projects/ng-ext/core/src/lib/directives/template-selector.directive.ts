@@ -3,12 +3,12 @@ import { Directive, Input, TemplateRef } from '@angular/core';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: '[templateSelector]'
+  selector: '[templateSelector]',
 })
 export class TemplateSelectorDirective<TTemplate = any> {
   @Input('templateSelector') public info?: TemplateDefinition<TTemplate>;
 
-  public constructor(public template: TemplateRef<any>) { }
+  public constructor(public template: TemplateRef<any>) {}
 
   public get name(): string {
     if (this.info?.name) {

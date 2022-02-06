@@ -7,7 +7,13 @@ import { ControlStateOptions } from './models/controls.model';
 export class FormGroupExt<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TGroupValues extends { [key in keyof TGroupValues]: any },
-  TGroupControls extends { [key in keyof TGroupValues]: FormArrayExt<TGroupValues[key]> | FormControlExt<TGroupValues[key]> | FormGroupExt<TGroupValues[key]>; } = { [key in keyof TGroupValues]: FormControlExt<TGroupValues[key]> }> extends FormGroup {
+  TGroupControls extends {
+    [key in keyof TGroupValues]:
+      | FormArrayExt<TGroupValues[key]>
+      | FormControlExt<TGroupValues[key]>
+      | FormGroupExt<TGroupValues[key]>;
+  } = { [key in keyof TGroupValues]: FormControlExt<TGroupValues[key]> }
+> extends FormGroup {
   private suspendedValidator: ValidatorFn | null = null;
   private suspendedAsyncValidator: AsyncValidatorFn | null = null;
 
@@ -39,7 +45,12 @@ export class FormGroupExt<
     return this;
   }
 
-  public enableDisable(enable: boolean, resetOnDisable = true, resetValue?: Partial<TGroupValues>, options?: ControlStateOptions): this {
+  public enableDisable(
+    enable: boolean,
+    resetOnDisable = true,
+    resetValue?: Partial<TGroupValues>,
+    options?: ControlStateOptions
+  ): this {
     enableDisableControl(this, enable, resetOnDisable, resetValue, options);
     return this;
   }

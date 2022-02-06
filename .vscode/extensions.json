@@ -7,6 +7,7 @@
     "mhutchie.git-graph",
     "eamodio.gitlens",
     "Orta.vscode-jest",
-    "cyrilletuzi.angular-schematics"
+    "cyrilletuzi.angular-schematics",
+    "esbenp.prettier-vscode"
   ]
 }

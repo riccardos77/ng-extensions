@@ -6,17 +6,19 @@ import '../extensions/router.extension';
 @Injectable()
 export class LeavePageGuard implements CanDeactivate<ILeavePage>, OnDestroy {
   public constructor(private router: Router) {
-    window.addEventListener(
-      'beforeunload',
-      this.beforeUnloadHandler.bind(this)
-    );
+    window.addEventListener('beforeunload', this.beforeUnloadHandler.bind(this));
   }
 
   public ngOnDestroy(): void {
     window.removeEventListener('beforeunload', this.beforeUnloadHandler.bind(this));
   }
 
-  public canDeactivate(component: ILeavePage, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<UrlTree | boolean> | Promise<UrlTree | boolean> | UrlTree | boolean {
+  public canDeactivate(
+    component: ILeavePage,
+    currentRoute: ActivatedRouteSnapshot,
+    currentState: RouterStateSnapshot,
+    nextState?: RouterStateSnapshot
+  ): Observable<UrlTree | boolean> | Promise<UrlTree | boolean> | UrlTree | boolean {
     if (component?.canDeactivateRoute !== undefined) {
       return component.canDeactivateRoute(currentRoute, currentState, nextState);
     } else {
@@ -42,5 +44,9 @@ export class LeavePageGuard implements CanDeactivate<ILeavePage>, OnDestroy {
 
 export interface ILeavePage {
   canUnloadWindow: () => boolean;
-  canDeactivateRoute: (currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot) => Observable<UrlTree | boolean> | Promise<UrlTree | boolean> | UrlTree | boolean;
+  canDeactivateRoute: (
+    currentRoute: ActivatedRouteSnapshot,
+    currentState: RouterStateSnapshot,
+    nextState?: RouterStateSnapshot
+  ) => Observable<UrlTree | boolean> | Promise<UrlTree | boolean> | UrlTree | boolean;
 }

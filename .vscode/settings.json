@@ -1,21 +1,5 @@
 {
   "typescript.tsdk": "node_modules\\typescript\\lib",
-  "eslint.options": {
-    "extensions": [
-      ".ts",
-      ".html"
-    ]
-  },
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "html"
-  ],
-  "editor.codeActionsOnSave": {
-    "source.fixAll.tslint": false
-  },
-  "jest.jestCommandLine": "npx jest",
-  "jest.autoRun": "off"
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "jest.jestCommandLine": "npx jest"
 }

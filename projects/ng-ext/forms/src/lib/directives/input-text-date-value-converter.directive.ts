@@ -9,8 +9,8 @@ import { ControlValueConverterBaseDirective } from './control-value-converter-ba
   selector: 'input[type=text][dateConverter]',
   providers: [
     { provide: NG_VALUE_ACCESSOR, useExisting: InputTextDateValueConverterDirective, multi: true },
-    { provide: NG_VALIDATORS, useExisting: InputTextDateValueConverterDirective, multi: true }
-  ]
+    { provide: NG_VALIDATORS, useExisting: InputTextDateValueConverterDirective, multi: true },
+  ],
 })
 export class InputTextDateValueConverterDirective extends ControlValueConverterBaseDirective<string, Date | undefined> {
   // eslint-disable-next-line @angular-eslint/no-input-rename

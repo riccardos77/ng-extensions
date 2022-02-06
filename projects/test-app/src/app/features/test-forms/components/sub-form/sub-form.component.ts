@@ -9,9 +9,9 @@ import { FormControlBaseComponentConfig } from '../../../../../../../ng-ext/form
   styleUrls: ['./sub-form.component.scss'],
   providers: [
     { provide: NG_VALUE_ACCESSOR, useExisting: SubFormComponent, multi: true },
-    { provide: NG_VALIDATORS, useExisting: SubFormComponent, multi: true }
+    { provide: NG_VALIDATORS, useExisting: SubFormComponent, multi: true },
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubFormComponent extends FormControlBaseComponent<SubFormModel, SubFormValues, SubFormControls> {
   private field1;
@@ -40,21 +40,21 @@ export class SubFormComponent extends FormControlBaseComponent<SubFormModel, Sub
   protected override initForm(): SubFormControls {
     return {
       s: new FormControlExt(''),
-      n1: new FormControlExt('')
+      n1: new FormControlExt(''),
     };
   }
 
   protected override modelToForm(model: SubFormModel): SubFormValues {
     return {
       n1: model.n1?.toString() ?? '',
-      s: model.s + this.field2
+      s: model.s + this.field2,
     };
   }
 
   protected override formToModel(values: SubFormValues): SubFormModel {
     return {
       s: values.s,
-      n1: (values.n1.convertToNumber() ?? 0) * this.field1
+      n1: (values.n1.convertToNumber() ?? 0) * this.field1,
     };
   }
 }
@@ -64,5 +64,8 @@ export interface SubFormModel {
   n1?: number;
 }
 
-type SubFormValues = { s: string; n1: string };
+interface SubFormValues {
+  s: string;
+  n1: string;
+}
 type SubFormControls = Required<{ [key in keyof SubFormValues]: FormControlExt<SubFormValues[key]> }>;

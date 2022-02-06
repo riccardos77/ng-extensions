@@ -1,11 +1,11 @@
 {
-  "extends": "../../../.eslintrc.json",
+  "extends": "../../.eslintrc.json",
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {
       "files": ["*.ts"],
       "parserOptions": {
-        "project": ["projects/ng-ext/router/tsconfig.lib.json", "projects/ng-ext/router/tsconfig.spec.json"],
+        "project": ["projects/test-app/tsconfig.app.json", "projects/test-app/tsconfig.spec.json"],
         "createDefaultProgram": true
       },
       "rules": {
@@ -13,7 +13,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "ngExt",
+            "prefix": "app",
             "style": "camelCase"
           }
         ],
@@ -21,7 +21,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "ng-ext",
+            "prefix": "app",
             "style": "kebab-case"
           }
         ]

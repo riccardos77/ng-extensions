@@ -12,7 +12,7 @@ export abstract class ControlValueConverterBaseDirective<TControlValue, TModelVa
   private onChangeFn?: (_: any) => void;
   private onTouchedFn?: () => void;
 
-  public constructor(private renderer: Renderer2, private elementRef: ElementRef) { }
+  public constructor(private renderer: Renderer2, private elementRef: ElementRef) {}
 
   @HostListener('input', ['$event.target'])
   public onInput(target: any): void {
@@ -27,11 +27,7 @@ export abstract class ControlValueConverterBaseDirective<TControlValue, TModelVa
   }
 
   public writeValue(obj: any): void {
-    this.renderer.setProperty(
-      this.elementRef.nativeElement,
-      'value',
-      this.modelToControl(obj as TModelValue)
-    );
+    this.renderer.setProperty(this.elementRef.nativeElement, 'value', this.modelToControl(obj as TModelValue));
   }
 
   public registerOnChange(fn: any): void {
@@ -43,17 +39,12 @@ export abstract class ControlValueConverterBaseDirective<TControlValue, TModelVa
   }
 
   public setDisabledState(isDisabled: boolean): void {
-    this.renderer.setProperty(
-      this.elementRef.nativeElement,
-      'disabled',
-      isDisabled
-    );
+    this.renderer.setProperty(this.elementRef.nativeElement, 'disabled', isDisabled);
   }
 
   public validate(control: AbstractControl): ValidationErrors | null {
     return this.validateValue(control.value);
   }
-
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected validateValue(value: TControlValue): ValidationErrors | null {
@@ -61,5 +52,4 @@ export abstract class ControlValueConverterBaseDirective<TControlValue, TModelVa
   }
   protected abstract controlToModel(control: TControlValue): TModelValue;
   protected abstract modelToControl(value: TModelValue): TControlValue;
-
 }

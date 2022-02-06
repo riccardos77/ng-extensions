@@ -29,9 +29,7 @@ export class JsonReviverBuilder {
   public build(): JsonReviverFunction {
     return (k, v) => {
       if (this.reviverPipeline.length > 0) {
-        return this.reviverPipeline.reduce(
-          (prev, pipelineFn) => pipelineFn(k, prev),
-          v);
+        return this.reviverPipeline.reduce((prev, pipelineFn) => pipelineFn(k, prev), v);
       } else {
         return v;
       }

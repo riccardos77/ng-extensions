@@ -5,16 +5,15 @@ import { TemplateBaseComponent, TemplateDefinition } from '@ng-ext/core';
   selector: 'app-test-template',
   templateUrl: './test-template.component.html',
   styleUrls: ['./test-template.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TestTemplateComponent extends TemplateBaseComponent<TestTemplateTemplates> implements OnInit {
-
   public ngOnInit(): void {
     this.templates.t1.context = {
       $implicit: {
         text: 'abc',
-        number: 123
-      }
+        number: 123,
+      },
     };
   }
 

@@ -1,7 +1,13 @@
 import { AbstractControl, ValidatorFn, Validators } from '@angular/forms';
 import { enableDisableControl } from '../controls/helpers/control.helpers';
 
-export type FormSectionState = 'enabledOptional' | 'enabledRequired' | 'hiddenValueAllowed' | 'hiddenValueForbidden' | 'readOnlyValueAllowed' | 'readOnlyValueForbidden';
+export type FormSectionState =
+  | 'enabledOptional'
+  | 'enabledRequired'
+  | 'hiddenValueAllowed'
+  | 'hiddenValueForbidden'
+  | 'readOnlyValueAllowed'
+  | 'readOnlyValueForbidden';
 
 export const formSectionStates = {
   enabledRequired: 'enabledRequired' as FormSectionState,
@@ -9,11 +15,16 @@ export const formSectionStates = {
   readOnlyValueAllowed: 'readOnlyValueAllowed' as FormSectionState,
   readOnlyValueForbidden: 'readOnlyValueForbidden' as FormSectionState,
   hiddenValueAllowed: 'hiddenValueAllowed' as FormSectionState,
-  hiddenValueForbidden: 'hiddenValueForbidden' as FormSectionState
+  hiddenValueForbidden: 'hiddenValueForbidden' as FormSectionState,
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-export function manageSectionControls(controls: AbstractControl[], sectionState: FormSectionState, additionalValidators: ValidatorFn[] = [], resetValue?: any): void {
+export function manageSectionControls(
+  controls: AbstractControl[],
+  sectionState: FormSectionState,
+  additionalValidators: ValidatorFn[] = [],
+  resetValue?: unknown
+): void {
   controls.forEach(c => {
     switch (sectionState) {
       case formSectionStates.enabledRequired:
@@ -49,5 +60,9 @@ export function isSectionVisible(section: FormSectionState): boolean {
 }
 
 export function isSectionValueAllowed(section: FormSectionState): boolean {
-  return section === formSectionStates.enabledRequired || section === formSectionStates.enabledOptional || section === formSectionStates.hiddenValueAllowed;
+  return (
+    section === formSectionStates.enabledRequired ||
+    section === formSectionStates.enabledOptional ||
+    section === formSectionStates.hiddenValueAllowed
+  );
 }

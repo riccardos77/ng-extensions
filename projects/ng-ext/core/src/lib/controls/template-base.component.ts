@@ -5,9 +5,12 @@ import { getTemplateContext, getTemplateRef, hasTemplateRef, templateAfterConten
 // eslint-disable-next-line @angular-eslint/use-component-selector
 @Component({
   template: '',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export abstract class TemplateBaseComponent<TTemplateDefinitions extends { [key in keyof TTemplateDefinitions]: TemplateDefinition | null }> implements AfterContentInit {
+export abstract class TemplateBaseComponent<
+  TTemplateDefinitions extends { [key in keyof TTemplateDefinitions]: TemplateDefinition | null }
+> implements AfterContentInit
+{
   @ContentChildren(TemplateSelectorDirective)
   public templateSelectors?: QueryList<TemplateSelectorDirective>;
   public getTemplateRef = getTemplateRef;

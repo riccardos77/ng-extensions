@@ -1,18 +1,11 @@
 {
   "extends": "../../../.eslintrc.json",
-  "ignorePatterns": [
-    "!**/*"
-  ],
+  "ignorePatterns": ["!**/*"],
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "parserOptions": {
-        "project": [
-          "projects/ng-ext/core/tsconfig.lib.json",
-          "projects/ng-ext/core/tsconfig.spec.json"
-        ],
+        "project": ["projects/ng-ext/core/tsconfig.lib.json", "projects/ng-ext/core/tsconfig.spec.json"],
         "createDefaultProgram": true
       },
       "rules": {
@@ -33,12 +26,6 @@
           }
         ]
       }
-    },
-    {
-      "files": [
-        "*.html"
-      ],
-      "rules": {}
     }
   ]
 }

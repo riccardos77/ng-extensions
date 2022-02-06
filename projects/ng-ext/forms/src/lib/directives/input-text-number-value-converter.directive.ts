@@ -9,8 +9,8 @@ import { ControlValueConverterBaseDirective } from './control-value-converter-ba
   selector: 'input[type=text][numberConverter]',
   providers: [
     { provide: NG_VALUE_ACCESSOR, useExisting: InputTextNumberValueConverterDirective, multi: true },
-    { provide: NG_VALIDATORS, useExisting: InputTextNumberValueConverterDirective, multi: true }
-  ]
+    { provide: NG_VALIDATORS, useExisting: InputTextNumberValueConverterDirective, multi: true },
+  ],
 })
 export class InputTextNumberValueConverterDirective extends ControlValueConverterBaseDirective<string, number | undefined> {
   // eslint-disable-next-line @angular-eslint/no-input-rename

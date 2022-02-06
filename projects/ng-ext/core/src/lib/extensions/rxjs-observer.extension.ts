@@ -1,6 +1,6 @@
 import { Subscriber } from 'rxjs';
 
-export { };
+export {};
 
 declare module 'rxjs' {
   interface Subscriber<T> {
@@ -8,10 +8,7 @@ declare module 'rxjs' {
   }
 }
 
-Subscriber.prototype.nextAndComplete = function <T>(
-  this: Subscriber<T>,
-  value?: T
-): void {
+Subscriber.prototype.nextAndComplete = function <T>(this: Subscriber<T>, value?: T): void {
   if (this !== undefined) {
     this.next(value);
     this.complete();

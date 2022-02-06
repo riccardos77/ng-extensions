@@ -1,43 +1,18 @@
 {
-  "extends": "./.eslintrc-angular-base.json",
+  "root": true,
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "parserOptions": {
-        "project": [
-          "tsconfig.json"
-        ],
-        "createDefaultProgram": true
+        "project": ["tsconfig.json"]
       },
-      "rules": {
-        "@angular-eslint/directive-selector": [
-          "error",
-          {
-            "type": "attribute",
-            "prefix": "ngExt",
-            "style": "camelCase"
-          }
-        ],
-        "@angular-eslint/component-selector": [
-          "error",
-          {
-            "type": "element",
-            "prefix": "ng-ext",
-            "style": "kebab-case"
-          }
-        ]
-      }
+      "plugins": ["@riccardos77/eslint-plugin-angular"],
+      "extends": "plugin:@riccardos77/eslint-plugin-angular/recommended"
     },
     {
-      "files": [
-        "*.html"
-      ],
-      "extends": [
-        "plugin:@angular-eslint/template/recommended"
-      ],
-      "rules": {}
+      "files": ["*.html"],
+      "plugins": ["@riccardos77/eslint-plugin-angular"],
+      "extends": ["plugin:@riccardos77/eslint-plugin-angular/template-recommended"]
     }
   ]
 }

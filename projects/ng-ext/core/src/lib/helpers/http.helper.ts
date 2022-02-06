@@ -27,11 +27,11 @@ export function encodeUriQuery(s: string): string {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export function addQueryParam(name: string, value: any): string {
   if (value !== null && value !== undefined) {
-    return Array.isArray(value) ?
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      value.map(v => `${encodeUriQuery(name)}=${encodeUriQuery(v)}`).join('&') :
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      `${encodeUriQuery(name)}=${encodeUriQuery(value)}`;
+    return Array.isArray(value)
+      ? // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        value.map(v => `${encodeUriQuery(name)}=${encodeUriQuery(v)}`).join('&')
+      : // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        `${encodeUriQuery(name)}=${encodeUriQuery(value)}`;
   } else {
     return '';
   }
@@ -41,7 +41,6 @@ export function serializeQueryParams(params: Record<string, unknown>): string {
   const strParams: string[] = Object.entries(params).map(([name, value]) => addQueryParam(name, value));
   return strParams.length ? `?${strParams.join('&')}` : '';
 }
-
 
 export function isHttpError<T>(err: Error, checkStatus: number, checkContent?: (error: T) => boolean): boolean {
   if (err instanceof HttpErrorResponse) {

@@ -6,24 +6,14 @@ import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
   imports: [],
-  declarations: [
-    HasFlagsPipe,
-    MouseDirective,
-    SafePipe,
-    TemplateSelectorDirective
-  ],
-  exports: [
-    HasFlagsPipe,
-    MouseDirective,
-    SafePipe,
-    TemplateSelectorDirective
-  ]
+  declarations: [HasFlagsPipe, MouseDirective, SafePipe, TemplateSelectorDirective],
+  exports: [HasFlagsPipe, MouseDirective, SafePipe, TemplateSelectorDirective],
 })
 export class NgExtCoreModule {
   public static forRoot(): ModuleWithProviders<NgExtCoreModule> {
     return {
       ngModule: NgExtCoreModule,
-      providers: []
+      providers: [],
     };
   }
 }

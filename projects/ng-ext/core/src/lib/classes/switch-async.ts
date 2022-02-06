@@ -1,8 +1,7 @@
-
 class SwitchExecutorAsync<TValue, TResult> implements SwitchCaseAsync<TValue, TResult>, SwitchDefaultCaseAsync<TResult> {
   private foundResultPromise?: Promise<TResult | undefined>;
 
-  public constructor(private valueToEvaluate: TValue) { }
+  public constructor(private valueToEvaluate: TValue) {}
 
   public case(
     caseEvaluator: (value: TValue) => boolean,
@@ -42,9 +41,7 @@ class SwitchExecutorAsync<TValue, TResult> implements SwitchCaseAsync<TValue, TR
 }
 
 export class SwitchAsync<TValue> {
-
-  private constructor(private valueToEvaluate: TValue) {
-  }
+  private constructor(private valueToEvaluate: TValue) {}
 
   public static from<TValue>(value: TValue): SwitchAsync<TValue> {
     return new SwitchAsync(value);
@@ -67,7 +64,10 @@ export class SwitchAsync<TValue> {
 }
 
 export interface SwitchCaseAsync<TValue, TResult> {
-  case: (caseEvaluator: (value: TValue) => boolean, caseResult: (value: TValue) => Promise<TResult> | TResult) => SwitchCaseAsync<TValue, TResult>;
+  case: (
+    caseEvaluator: (value: TValue) => boolean,
+    caseResult: (value: TValue) => Promise<TResult> | TResult
+  ) => SwitchCaseAsync<TValue, TResult>;
 
   caseTyped: <TValue2 extends TValue>(
     typeEvaluator: (value: TValue) => value is TValue2,

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
 import { formatCurrency, formatNumber, formatPercent, NumberFormatStyle } from '@angular/common';
 
-export { };
+export {};
 
 declare global {
   interface Number {

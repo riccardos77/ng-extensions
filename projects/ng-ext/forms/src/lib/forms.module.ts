@@ -4,16 +4,8 @@ import { InputTextNumberValueConverterDirective } from './directives/input-text-
 import { SelectPlaceholderDirective } from './directives/select-placeholder.directive';
 
 @NgModule({
-  declarations: [
-    InputTextDateValueConverterDirective,
-    InputTextNumberValueConverterDirective,
-    SelectPlaceholderDirective
-  ],
+  declarations: [InputTextDateValueConverterDirective, InputTextNumberValueConverterDirective, SelectPlaceholderDirective],
   imports: [],
-  exports: [
-    InputTextDateValueConverterDirective,
-    InputTextNumberValueConverterDirective,
-    SelectPlaceholderDirective
-  ]
+  exports: [InputTextDateValueConverterDirective, InputTextNumberValueConverterDirective, SelectPlaceholderDirective],
 })
-export class NgExtFormsModule { }
+export class NgExtFormsModule {}

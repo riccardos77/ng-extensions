@@ -9,9 +9,8 @@ type Unpacked<T> = T extends (infer U)[] ? U : T;
 export class FormArrayExt<
   TValueArray extends TValue[],
   TValue = Unpacked<TValueArray>,
-  TControl extends FormControlExt<TValue> | FormGroupExt<TValue> = FormControlExt<TValue>>
-  extends FormArray {
-
+  TControl extends FormControlExt<TValue> | FormGroupExt<TValue> = FormControlExt<TValue>
+> extends FormArray {
   private suspendedValidator: ValidatorFn | null = null;
   private suspendedAsyncValidator: AsyncValidatorFn | null = null;
 

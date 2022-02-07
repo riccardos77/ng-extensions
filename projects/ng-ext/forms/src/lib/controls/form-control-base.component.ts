@@ -138,7 +138,7 @@ export abstract class FormControlBaseComponent<
   }
 
   private formUpdated(): void {
-    const formToModel$ = wrapIntoObservable(this.formToModel(this.form.v));
+    const formToModel$ = wrapIntoObservable(this.formToModel(this.form.rv));
     formToModel$.subscribe(result => {
       if (this.onChangeFn) {
         this.onChangeFn(result);

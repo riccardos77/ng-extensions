@@ -1,6 +1,6 @@
 {
   "name": "@ng-ext/core",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "peerDependencies": {
     "@angular/common": ">= 12.0.0 < 14.0.0",
     "@angular/core": ">= 12.0.0 < 14.0.0",

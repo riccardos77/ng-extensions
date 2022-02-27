@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'forms',
+  displayName: 'core',
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../coverage/libs/forms',
+  coverageDirectory: '../../../coverage/libs/core',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

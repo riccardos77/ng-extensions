@@ -25,7 +25,7 @@ describe('switchAsync.class', () => {
   it('case result can have complex async logic', async () => {
     expect.hasAssertions();
 
-    const result = await SwitchAsync.from(10)
+    const result1 = await SwitchAsync.from(10)
       .case(
         i => i % 2 === 0,
         async i => {
@@ -34,14 +34,21 @@ describe('switchAsync.class', () => {
         }
       )
       .executeAsync();
+    expect(result1).toBe('10 è pari');
 
-    expect(result).toBe('10 è pari');
+    const result2 = await SwitchAsync.from(10)
+      .case(10, async i => {
+        const a = await promiseTimeout(`${i} è pari`);
+        return a;
+      })
+      .executeAsync();
+    expect(result2).toBe('10 è pari');
   });
 
   it('case result can also be a non Promise', async () => {
     expect.hasAssertions();
 
-    const result = await SwitchAsync.from(1)
+    const result1 = await SwitchAsync.from(1)
       .case(
         i => i === 1,
         () => 'uno'
@@ -51,8 +58,10 @@ describe('switchAsync.class', () => {
         () => 'uno bis'
       )
       .executeAsync();
+    expect(result1).toBe('uno');
 
-    expect(result).toBe('uno');
+    const result2 = await SwitchAsync.from(1).case(1, 'uno').case(1, 'uno bis').executeAsync();
+    expect(result2).toBe('uno');
   });
 
   it('stop after first match', async () => {
@@ -77,15 +86,17 @@ describe('switchAsync.class', () => {
   it('default must be ignored when case found', async () => {
     expect.hasAssertions();
 
-    const result = await SwitchAsync.from(1)
+    const result1 = await SwitchAsync.from(1)
       .case(
         i => i === 1,
-        () => 'uno'
+        async () => promiseTimeout('uno')
       )
       .default(() => 'due')
       .executeAsync();
+    expect(result1).toBe('uno');
 
-    expect(result).toBe('uno');
+    const result2 = await SwitchAsync.from(1).case(1, promiseTimeout('uno')).default('due').executeAsync();
+    expect(result2).toBe('uno');
   });
 
   it('no match without default', async () => {
@@ -115,11 +126,28 @@ describe('switchAsync.class', () => {
     expect(result).toBe('def');
   });
 
+  it('case returns null as result', async () => {
+    expect.hasAssertions();
+
+    const result1 = await SwitchAsync.from(1)
+      .case<string | null>(
+        i => i === 1,
+        () => null
+      )
+      .default(() => 'def')
+      .executeAsync();
+    expect(result1).toBeNull();
+
+    const result2 = await SwitchAsync.from(1).case<string | null>(1, null).default('def').executeAsync();
+    expect(result2).toBeNull();
+  });
+
   it('case with type guard in first case', async () => {
     expect.hasAssertions();
 
     const a: TestType1 = { stringValue: 'abc', numberValue: 123 } as TestType2;
-    const result = await SwitchAsync.from(a)
+
+    const result1 = await SwitchAsync.from(a)
       .caseTyped(
         (o): o is TestType2 => 'numberValue' in o,
         o => o.numberValue === 123,
@@ -130,8 +158,7 @@ describe('switchAsync.class', () => {
         async () => promiseTimeout('uno')
       )
       .executeAsync();
-
-    expect(result).toBe('o is TestType2 and numberValue is 123');
+    expect(result1).toBe('o is TestType2 and numberValue is 123');
   });
 
   it('case with type guard in other cases', async () => {

@@ -1,14 +1,18 @@
+import { evaluateSwitchCase, getSwitchCaseResultAsync, SwitchCaseEvaluator, SwitchCaseResultAsync } from './switch-common';
+
 class SwitchExecutorAsync<TValue, TResult> implements SwitchCaseAsync<TValue, TResult>, SwitchDefaultCaseAsync<TResult> {
   private foundResultPromise?: Promise<TResult | undefined>;
+  private caseFound = false;
 
   public constructor(private valueToEvaluate: TValue) {}
 
   public case(
-    caseEvaluator: (value: TValue) => boolean,
-    caseResult: (value: TValue) => Promise<TResult> | TResult
+    caseEvaluator: SwitchCaseEvaluator<TValue>,
+    caseResult: SwitchCaseResultAsync<TValue, TResult>
   ): SwitchCaseAsync<TValue, TResult> {
-    if (!this.foundResultPromise && caseEvaluator(this.valueToEvaluate)) {
-      this.foundResultPromise = Promise.resolve(caseResult(this.valueToEvaluate));
+    if (!this.caseFound && evaluateSwitchCase(caseEvaluator, this.valueToEvaluate)) {
+      this.caseFound = true;
+      this.foundResultPromise = getSwitchCaseResultAsync(caseResult, this.valueToEvaluate);
     }
 
     return this;
@@ -16,19 +20,20 @@ class SwitchExecutorAsync<TValue, TResult> implements SwitchCaseAsync<TValue, TR
 
   public caseTyped<TValue2 extends TValue>(
     typeEvaluator: (value: TValue) => value is TValue2,
-    caseEvaluator: (value: TValue2) => boolean,
-    caseResult: (value: TValue2) => Promise<TResult> | TResult
+    caseEvaluator: SwitchCaseEvaluator<TValue2>,
+    caseResult: SwitchCaseResultAsync<TValue2, TResult>
   ): SwitchCaseAsync<TValue, TResult> {
-    if (!this.foundResultPromise && typeEvaluator(this.valueToEvaluate) && caseEvaluator(this.valueToEvaluate)) {
-      this.foundResultPromise = Promise.resolve(caseResult(this.valueToEvaluate));
+    if (!this.caseFound && typeEvaluator(this.valueToEvaluate) && evaluateSwitchCase(caseEvaluator, this.valueToEvaluate)) {
+      this.caseFound = true;
+      this.foundResultPromise = getSwitchCaseResultAsync(caseResult, this.valueToEvaluate);
     }
 
     return this;
   }
 
-  public default(caseResult: (value: TValue) => Promise<TResult> | TResult): SwitchDefaultCaseAsync<TResult> {
-    if (!this.foundResultPromise) {
-      this.foundResultPromise = Promise.resolve(caseResult(this.valueToEvaluate));
+  public default(caseResult: SwitchCaseResultAsync<TValue, TResult>): SwitchDefaultCaseAsync<TResult> {
+    if (!this.caseFound) {
+      this.foundResultPromise = getSwitchCaseResultAsync(caseResult, this.valueToEvaluate);
     }
 
     return this;
@@ -48,16 +53,16 @@ export class SwitchAsync<TValue> {
   }
 
   public case<TResult>(
-    caseEvaluator: (value: TValue) => boolean,
-    caseResult: (value: TValue) => Promise<TResult> | TResult
+    caseEvaluator: SwitchCaseEvaluator<TValue>,
+    caseResult: SwitchCaseResultAsync<TValue, TResult>
   ): SwitchCaseAsync<TValue, TResult> {
     return new SwitchExecutorAsync<TValue, TResult>(this.valueToEvaluate).case(caseEvaluator, caseResult);
   }
 
   public caseTyped<TValue2 extends TValue, TResult>(
     typeEvaluator: (value: TValue) => value is TValue2,
-    caseEvaluator: (value: TValue2) => boolean,
-    caseResult: (value: TValue2) => Promise<TResult> | TResult
+    caseEvaluator: SwitchCaseEvaluator<TValue2>,
+    caseResult: SwitchCaseResultAsync<TValue2, TResult>
   ): SwitchCaseAsync<TValue, TResult> {
     return new SwitchExecutorAsync<TValue, TResult>(this.valueToEvaluate).caseTyped(typeEvaluator, caseEvaluator, caseResult);
   }
@@ -65,17 +70,17 @@ export class SwitchAsync<TValue> {
 
 export interface SwitchCaseAsync<TValue, TResult> {
   case: (
-    caseEvaluator: (value: TValue) => boolean,
-    caseResult: (value: TValue) => Promise<TResult> | TResult
+    caseEvaluator: SwitchCaseEvaluator<TValue>,
+    caseResult: SwitchCaseResultAsync<TValue, TResult>
   ) => SwitchCaseAsync<TValue, TResult>;
 
   caseTyped: <TValue2 extends TValue>(
     typeEvaluator: (value: TValue) => value is TValue2,
-    caseEvaluator: (value: TValue2) => boolean,
-    caseResult: (value: TValue2) => Promise<TResult> | TResult
+    caseEvaluator: SwitchCaseEvaluator<TValue2>,
+    caseResult: SwitchCaseResultAsync<TValue2, TResult>
   ) => SwitchCaseAsync<TValue, TResult>;
 
-  default: (caseResult: (value: TValue) => Promise<TResult> | TResult) => SwitchDefaultCaseAsync<TResult>;
+  default: (caseResult: SwitchCaseResultAsync<TValue, TResult>) => SwitchDefaultCaseAsync<TResult>;
 
   executeAsync: () => Promise<TResult | undefined>;
 }

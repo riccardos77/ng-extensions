@@ -11,7 +11,7 @@
       "schematics": {
         "@schematics/angular:component": {
           "changeDetection": "OnPush",
-          "prefix": "ng-ext",
+          "prefix": "ngext",
           "style": "scss"
         },
         "@schematics/angular:directive": {
@@ -50,7 +50,7 @@
       "schematics": {
         "@schematics/angular:component": {
           "changeDetection": "OnPush",
-          "prefix": "ng-ext",
+          "prefix": "ngext",
           "style": "scss"
         },
         "@schematics/angular:directive": {
@@ -89,7 +89,7 @@
       "schematics": {
         "@schematics/angular:component": {
           "changeDetection": "OnPush",
-          "prefix": "ng-ext",
+          "prefix": "ngext",
           "style": "scss"
         },
         "@schematics/angular:directive": {

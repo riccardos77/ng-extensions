@@ -44,7 +44,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-editorconfig": "^3.2.0",
     "eslint-plugin-jest": "^26.0.0",
-    "@ricsal/eslint-plugin-angular": "file:libraries/ricsal-eslint-plugin-angular-1.0.0.tgz",
+    "@riccardos77/eslint-plugin-angular": "file:libraries/riccardos77-eslint-plugin-angular-1.0.0.tgz",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.5.0",
     "jest-preset-angular": "^11.1.0",

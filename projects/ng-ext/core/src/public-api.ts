@@ -1,6 +1,7 @@
 export * from './lib/classes/json-reviver';
 export * from './lib/classes/switch';
 export * from './lib/classes/switch-async';
+export * from './lib/controls/string-template.component';
 export * from './lib/controls/template-base.component';
 export * from './lib/core.module';
 export * from './lib/directives/mouse.directive';
@@ -12,6 +13,7 @@ export * from './lib/extensions/rxjs-observer.extension';
 export * from './lib/extensions/string.extension';
 export * from './lib/helpers/async.helpers';
 export * from './lib/helpers/http.helper';
+export * from './lib/helpers/string-template.helper';
 export * from './lib/helpers/template-base.helper';
 export * from './lib/http-interceptors/json-reviver.interceptor';
 export * from './lib/pipes/hasFlags.pipe';

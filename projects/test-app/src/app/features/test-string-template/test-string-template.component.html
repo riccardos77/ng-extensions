@@ -1,0 +1,13 @@
+<p>template with context</p>
+
+<ngext-string-template
+  [stringTemplate]="stringTemplate"
+  [bindingContext]="bindingContext"
+  [fallbackTemplate]="fallback"
+></ngext-string-template>
+
+<p>template without context</p>
+
+<ngext-string-template [stringTemplate]="stringTemplateWithoutContext" [fallbackTemplate]="fallback"></ngext-string-template>
+
+<ng-template #fallback>saluto di fallback</ng-template>

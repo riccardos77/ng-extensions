@@ -3,6 +3,7 @@ import { LeavePageGuard } from '@ng-ext/router';
 import { HomeComponent } from './features/home/home.component';
 import { TestFormsComponent } from './features/test-forms/test-forms.component';
 import { TestRouterComponent } from './features/test-router/test-router.component';
+import { TestStringTemplateComponent } from './features/test-string-template/test-string-template.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -15,6 +16,11 @@ export const routes: Routes = [
   {
     path: 'test-forms',
     component: TestFormsComponent,
+    canDeactivate: [LeavePageGuard],
+  },
+  {
+    path: 'test-string-template',
+    component: TestStringTemplateComponent,
     canDeactivate: [LeavePageGuard],
   },
 ];

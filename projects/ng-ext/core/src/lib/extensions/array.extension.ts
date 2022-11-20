@@ -13,6 +13,8 @@ declare global {
       keySelector: keyof T | ((item: T) => unknown),
       action: 'keepExisting' | 'mergeWithAssign' | 'override' | ((original: T, other: T) => T)
     ) => T[];
+
+    single: (predicate: (value: T, index: number, obj: T[]) => unknown) => T;
   }
 }
 
@@ -63,5 +65,18 @@ Array.prototype.merge = function <T>(
     return [...list1, ...list2];
   } else {
     return otherArray;
+  }
+};
+
+Array.prototype.single = function <T>(this: T[], predicate: (value: T, index: number, obj: T[]) => unknown): T {
+  if (this !== undefined) {
+    const results = this.filter(predicate);
+    if (results.length === 1) {
+      return results[0];
+    } else {
+      throw new Error('predicate must match exactly one item');
+    }
+  } else {
+    throw new Error('this is undefined');
   }
 };

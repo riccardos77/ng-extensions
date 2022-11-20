@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { from, isObservable, Observable, of } from 'rxjs';
+import { firstValueFrom, from, isObservable, Observable, of } from 'rxjs';
 
 export function isPromise<T>(obj: any): obj is Promise<T> {
   // allow any Promise/A+ compliant thenable.
@@ -17,11 +17,20 @@ export function wrapIntoObservable<T>(value: Observable<T> | Promise<T> | T): Ob
   }
 
   if (isPromise<T>(value)) {
-    // Use `Promise.resolve()` to wrap promise-like instances.
-    // Required ie when a Resolver returns a AngularJS `$q` promise to correctly trigger the
-    // change detection.
     return from(Promise.resolve(value));
   }
 
   return of(value);
+}
+
+export function wrapIntoPromise<T>(value: Observable<T> | Promise<T> | T): Promise<T> {
+  if (isPromise<T>(value)) {
+    return value;
+  }
+
+  if (isObservable(value)) {
+    return firstValueFrom(value);
+  }
+
+  return Promise.resolve(value);
 }

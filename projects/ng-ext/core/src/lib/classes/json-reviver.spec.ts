@@ -37,9 +37,30 @@ describe('json-reviver.class', () => {
     expect(typeof result2.date).toBe('string');
     expect(result2.date).toBe(inputDateString);
   });
+
+  it('custom function', () => {
+    expect.hasAssertions();
+
+    const inputDateString = '2022-01-31';
+
+    const result1 = JSON.parse(
+      `{ "str": "${inputDateString}", "date": "${inputDateString}" }`,
+      new JsonReviverBuilder()
+        .add((key: string, value: unknown) => (key === 'date' && typeof value === 'string' ? value.replace(/-/g, '/') : value))
+        .build()
+    ) as DeserializedResult2;
+
+    expect(result1.date).toBe('2022/01/31');
+    expect(result1.str).toBe(inputDateString);
+  });
 });
 
 interface DeserializedResult {
   str?: string;
   date: Date;
+}
+
+interface DeserializedResult2 {
+  str?: string;
+  date: string;
 }

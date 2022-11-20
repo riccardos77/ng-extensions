@@ -3,6 +3,11 @@ import moment from 'moment';
 export class JsonReviverBuilder {
   private reviverPipeline: JsonReviverFunction[] = [];
 
+  public add(reviverFunction: JsonReviverFunction): this {
+    this.reviverPipeline.push(reviverFunction);
+    return this;
+  }
+
   public addDateParser(includeDateOnly: boolean = false): this {
     const dateParserFn: JsonReviverFunction = (k, v) => {
       if (typeof v === 'string') {

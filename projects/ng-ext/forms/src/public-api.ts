@@ -1,4 +1,5 @@
 export * from './lib/controls/form-array-ext.control';
+export * from './lib/controls/form-control-base-model-only.component';
 export * from './lib/controls/form-control-base.component';
 export * from './lib/controls/form-control-ext.control';
 export * from './lib/controls/form-group-ext.control';

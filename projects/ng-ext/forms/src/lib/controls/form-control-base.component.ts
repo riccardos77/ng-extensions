@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
-import { wrapIntoObservable } from '@ng-ext/core';
+import { wrapIntoObservable, wrapIntoPromise } from '@ng-ext/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { FormArrayExt } from './form-array-ext.control';
 import { FormControlExt } from './form-control-ext.control';
@@ -109,9 +109,15 @@ export abstract class FormControlBaseComponent<
     enableDisableControl(control, enable, resetOnDisable, resetValue);
   }
 
+  public async notifyChangesAsync(): Promise<void> {
+    await this.formValueChangedAsync();
+    this.formStatusChanged();
+  }
+
   public notifyChanges(): void {
-    this.formUpdated();
-    this.statusUpdated();
+    this.formValueChangedAsync().then(_ => {
+      this.formStatusChanged();
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
@@ -128,29 +134,27 @@ export abstract class FormControlBaseComponent<
 
     if (this.configuration.notifyChangesMode === 'automatic') {
       this.valueChangedSubscription = this.form.valueChanges.subscribe(() => {
-        this.formUpdated();
+        this.formValueChangedAsync();
       });
 
       this.statusChangedSubscription = this.form.statusChanges.subscribe(() => {
-        this.statusUpdated();
+        this.formStatusChanged();
       });
     }
   }
 
-  private formUpdated(): void {
-    const formToModel$ = wrapIntoObservable(this.formToModel(this.form.rv));
-    formToModel$.subscribe(result => {
-      if (this.onChangeFn) {
-        this.onChangeFn(result);
-      }
+  private async formValueChangedAsync(): Promise<void> {
+    const result = await wrapIntoPromise(this.formToModel(this.form.rv));
+    if (this.onChangeFn) {
+      this.onChangeFn(result);
+    }
 
-      if (this.onTouchedFn) {
-        this.onTouchedFn();
-      }
-    });
+    if (this.onTouchedFn) {
+      this.onTouchedFn();
+    }
   }
 
-  private statusUpdated(): void {
+  private formStatusChanged(): void {
     if (this.onValidatorChangeFn) {
       this.onValidatorChangeFn();
     }
